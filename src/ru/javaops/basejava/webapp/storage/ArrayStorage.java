@@ -8,23 +8,10 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private static final int MAX_ARRAY_SIZE = 10000;
+    private static final int MAX_ARRAY_SIZE = 10_000;
 
     private final Resume[] storage = new Resume[MAX_ARRAY_SIZE];
     private int size = 0;
-
-    /**
-     * @param uuid identifier of Resume to be returned
-     * @return index in array storage for this Resume, or -1 if none
-     */
-    private int findIndex(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (uuid.equals(storage[i].getUuid())) {
-                return i;
-            }
-        }
-        return -1;
-    }
 
     /**
      * Removes all of the Resumes from this storage, all elements
@@ -36,31 +23,30 @@ public class ArrayStorage {
     }
 
     /**
-     * @param r Resume to be saved to this storage, if not present yet
-     *         and will not exceed size
+     * @param resume Resume to be saved to this storage, if not present yet
+     *               and will not exceed maximum size
      */
-    public void save(Resume r) {
-        if (findIndex(r.getUuid()) == -1) {
-            if (size < MAX_ARRAY_SIZE) {
-                storage[size++] = r;
-            } else {
-                System.out.println("Resume storage maximum size is reached.");
-            }
+    public void save(Resume resume) {
+        if (findIndex(resume.getUuid()) != -1) {
+            System.out.printf("Resume #%s already exists in storage.%n", resume.getUuid());
+        } else if (size >= MAX_ARRAY_SIZE) {
+            System.out.println("Resume storage maximum size has been reached.");
         } else {
-            System.out.println("Resume already exists in storage.");
+            storage[size] = resume;
+            size++;
         }
     }
 
     /**
-     * @param r Resume to be updated in this storage, if present
+     * @param resume Resume to be updated in this storage, if present
      */
-    public void update(Resume r) {
-        int i = findIndex(r.getUuid());
+    public void update(Resume resume) {
+        int index = findIndex(resume.getUuid());
 
-        if (i >= 0) {
-            storage[i] = r;
+        if (index == -1) {
+            System.out.printf("Resume #%s is not found in storage.%n", resume.getUuid());
         } else {
-            System.out.println("Resume not found in storage.");
+            storage[index] = resume;
         }
     }
 
@@ -69,27 +55,27 @@ public class ArrayStorage {
      * @return Resume with given uuid, or null if none
      */
     public Resume get(String uuid) {
-        int i = findIndex(uuid);
+        int index = findIndex(uuid);
 
-        if (i >= 0) {
-            return storage[i];
-        } else {
-            System.out.println("Resume not found in storage.");
+        if (index == -1) {
+            System.out.printf("Resume #%s is not found in storage.%n", uuid);
             return null;
         }
+        return storage[index];
     }
 
     /**
      * @param uuid identifier of Resume to be deleted from this storage, if present
      */
     public void delete(String uuid) {
-        int i = findIndex(uuid);
+        int index = findIndex(uuid);
 
-        if (i >= 0) {
-            storage[i] = storage[size - 1];
-            storage[--size] = null;
+        if (index == -1) {
+            System.out.printf("Resume #%s is not found in storage.%n", uuid);
         } else {
-            System.out.println("Resume not found in storage.");
+            storage[index] = storage[size - 1];
+            storage[size - 1] = null;
+            size--;
         }
     }
 
@@ -105,5 +91,18 @@ public class ArrayStorage {
      */
     public int size() {
         return size;
+    }
+
+    /**
+     * @param uuid identifier of Resume to be returned
+     * @return index in array storage for this Resume, or -1 if none
+     */
+    private int findIndex(String uuid) {
+        for (int i = 0; i < size; i++) {
+            if (uuid.equals(storage[i].getUuid())) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
