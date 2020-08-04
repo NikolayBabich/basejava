@@ -4,58 +4,30 @@ import ru.javaops.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
 
+/**
+ * Array based storage for Resumes, elements ordered lexicographically by uuid
+ */
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void clear() {
-        Arrays.fill(storage, 0, size, null);
-        size = 0;
+    protected void insert(int index, Resume resume) {
+        index = -index - 1;
+        System.arraycopy(storage, index, storage, index + 1, size - index);
+        storage[index] = resume;
     }
 
     @Override
-    public void save(Resume resume) {
-        int insertionIndex = findIndex(resume.getUuid());
-
-        if (insertionIndex >= 0) {
-            System.out.printf("Resume #%s already exists in storage.%n", resume.getUuid());
-        } else if (size >= MAX_STORAGE_SIZE) {
-            System.out.println("Resume storage maximum size has been reached.");
-        } else {
-            insertionIndex = -insertionIndex - 1;
-            System.arraycopy(storage, insertionIndex, storage, insertionIndex + 1, size - insertionIndex);
-            storage[insertionIndex] = resume;
-            size++;
-        }
+    protected void remove(int index) {
+        System.arraycopy(storage, index + 1, storage, index, size - index);
     }
 
-    @Override
-    public void update(Resume resume) {
-        int index = findIndex(resume.getUuid());
-
-        if (index < 0) {
-            System.out.printf("Resume #%s is not found in storage.%n", resume.getUuid());
-        } else {
-            storage[index] = resume;
-        }
-    }
-
-    @Override
-    public void delete(String uuid) {
-        int index = findIndex(uuid);
-
-        if (index < 0) {
-            System.out.printf("Resume #%s is not found in storage.%n", uuid);
-        } else {
-            System.arraycopy(storage, index + 1, storage, index, size - index);
-            size--;
-        }
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
-    }
-
+    /**
+     * @param uuid identifier of Resume to be returned
+     * @return index in array storage for this Resume, or negative value if none
+     *         otherwise, (-(insertion point) - 1). The insertion point defined as
+     *         the point at which the key would be inserted.
+     * @see Arrays#binarySearch(Object[], int, int, Object)
+     */
     @Override
     protected int findIndex(String uuid) {
         Resume searchKey = new Resume();
