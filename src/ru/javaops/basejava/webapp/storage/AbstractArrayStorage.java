@@ -1,5 +1,8 @@
 package ru.javaops.basejava.webapp.storage;
 
+import ru.javaops.basejava.webapp.exception.ExistStorageException;
+import ru.javaops.basejava.webapp.exception.NotExistStorageException;
+import ru.javaops.basejava.webapp.exception.StorageException;
 import ru.javaops.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -8,9 +11,9 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public abstract class AbstractArrayStorage implements Storage {
-    protected static final int MAX_STORAGE_SIZE = 10_000;
+    private static final int STORAGE_LIMIT_SIZE = 10_000;
 
-    protected final Resume[] storage = new Resume[MAX_STORAGE_SIZE];
+    protected final Resume[] storage = new Resume[STORAGE_LIMIT_SIZE];
     protected int size = 0;
 
     /**
@@ -24,16 +27,17 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     /**
-     * @param resume Resume to be saved to this storage, if not present yet
-     *               and will not exceed maximum size
+     * @param resume Resume to be saved to this storage
+     * @throws ExistStorageException if the Resume doesn't exist in this storage
+     * @throws StorageException if the Resume doesn't exist in this storage
      */
     @Override
     public final void save(Resume resume) {
         int index = findIndex(resume.getUuid());
         if (index >= 0) {
-            System.out.printf("Resume #%s already exists in storage.%n", resume.getUuid());
-        } else if (size >= MAX_STORAGE_SIZE) {
-            System.out.println("Resume storage maximum size has been reached.");
+            throw new ExistStorageException(resume.getUuid());
+        } else if (size >= STORAGE_LIMIT_SIZE) {
+            throw new StorageException("Resume storage limit size has been reached", resume.getUuid());
         } else {
             insert(index, resume);
             size++;
@@ -46,26 +50,29 @@ public abstract class AbstractArrayStorage implements Storage {
      */
     protected abstract void insert(int index, Resume resume);
 
+    /**
+     * @param resume Resume to replace one with the same uuid in this storage
+     * @throws NotExistStorageException if the Resume doesn't exist in this storage
+     */
     @Override
     public final void update(Resume resume) {
         int index = findIndex(resume.getUuid());
-
         if (index < 0) {
-            System.out.printf("Resume #%s is not found in storage.%n", resume.getUuid());
+            throw new NotExistStorageException(resume.getUuid());
         } else {
             storage[index] = resume;
         }
     }
 
     /**
-     * @param uuid identifier of Resume to be deleted from this storage, if present
+     * @param uuid identifier of Resume to be deleted from this storage
+     * @throws NotExistStorageException if the Resume doesn't exist in this storage
      */
     @Override
     public final void delete(String uuid) {
         int index = findIndex(uuid);
-
         if (index < 0) {
-            System.out.printf("Resume #%s is not found in storage.%n", uuid);
+            throw new NotExistStorageException(uuid);
         } else {
             remove(index);
             storage[size - 1] = null;
@@ -79,16 +86,15 @@ public abstract class AbstractArrayStorage implements Storage {
     protected abstract void remove(int index);
 
     /**
-     * @param uuid identifier of Resume to be returned, if present
-     * @return Resume with given uuid, or null if none
+     * @param uuid identifier of Resume to be returned
+     * @return Resume with given uuid
+     * @throws NotExistStorageException if the Resume doesn't exist in this storage
      */
     @Override
     public final Resume get(String uuid) {
         int index = findIndex(uuid);
-
         if (index < 0) {
-            System.out.printf("Resume #%s is not found in storage.%n", uuid);
-            return null;
+            throw new NotExistStorageException(uuid);
         }
         return storage[index];
     }
