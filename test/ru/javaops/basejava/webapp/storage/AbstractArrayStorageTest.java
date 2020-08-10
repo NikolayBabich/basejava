@@ -54,7 +54,7 @@ public abstract class AbstractArrayStorageTest {
                 storage.save(new Resume());
             }
         } catch (Exception e) {
-            Assert.fail();
+            Assert.fail("Unexpected exception before array is filled");
         }
         storage.save(new Resume());
     }

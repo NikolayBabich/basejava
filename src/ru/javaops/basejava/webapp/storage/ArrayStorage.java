@@ -5,7 +5,7 @@ import ru.javaops.basejava.webapp.model.Resume;
 /**
  * Array based storage for Resumes, elements order is not guaranteed
  */
-public class ArrayStorage extends AbstractArrayStorage {
+public final class ArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void insert(int index, Resume resume) {

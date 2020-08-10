@@ -7,7 +7,7 @@ import java.util.Arrays;
 /**
  * Array based storage for Resumes, elements ordered lexicographically by uuid
  */
-public class SortedArrayStorage extends AbstractArrayStorage {
+public final class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void insert(int index, Resume resume) {

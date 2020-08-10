@@ -29,7 +29,7 @@ public abstract class AbstractArrayStorage implements Storage {
     /**
      * @param resume Resume to be saved to this storage
      * @throws ExistStorageException if the Resume doesn't exist in this storage
-     * @throws StorageException if the Resume doesn't exist in this storage
+F     * @throws StorageException if this storage reaches limit size
      */
     @Override
     public final void save(Resume resume) {
@@ -37,7 +37,8 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             throw new ExistStorageException(resume.getUuid());
         } else if (size >= STORAGE_LIMIT_SIZE) {
-            throw new StorageException("Resume storage limit size has been reached", resume.getUuid());
+            throw new StorageException("Resume storage limit size has been reached",
+                                        resume.getUuid());
         } else {
             insert(index, resume);
             size++;
