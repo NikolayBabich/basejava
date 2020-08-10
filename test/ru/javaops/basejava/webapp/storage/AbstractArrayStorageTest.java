@@ -8,38 +8,42 @@ import ru.javaops.basejava.webapp.exception.NotExistStorageException;
 import ru.javaops.basejava.webapp.exception.StorageException;
 import ru.javaops.basejava.webapp.model.Resume;
 
+import static org.junit.Assert.assertEquals;
+
 public abstract class AbstractArrayStorageTest {
     private final Storage storage;
 
     private static final String UUID_1 = "uuidZ";
+    private static final Resume RESUME_1 = new Resume(UUID_1);
     private static final String UUID_2 = "uuidA";
+    private static final Resume RESUME_2 = new Resume(UUID_2);
     private static final String UUID_3 = "uuidQ";
+    private static final Resume RESUME_3 = new Resume(UUID_3);
+    private static final Resume RESUME_4 = new Resume();
 
-    public AbstractArrayStorageTest(Storage storage) {
+    protected AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
     }
 
     @Before
     public void setUp() {
-        storage.clear();
-        storage.save(new Resume(UUID_1));
-        storage.save(new Resume(UUID_2));
-        storage.save(new Resume(UUID_3));
+        storage.save(RESUME_1);
+        storage.save(RESUME_2);
+        storage.save(RESUME_3);
     }
 
     @Test
     public void clear() {
         storage.clear();
-        Assert.assertEquals(0, storage.size());
+        assertSize(0);
     }
 
     @Test
     public void save() {
         int size = storage.size();
-        Resume resume = new Resume();
-        storage.save(resume);
-        Assert.assertEquals(size + 1, storage.size());
-        Assert.assertSame(resume, storage.get(resume.getUuid()));
+        storage.save(RESUME_4);
+        assertSize(size + 1);
+        assertGet(RESUME_4);
     }
 
     @Test(expected = ExistStorageException.class)
@@ -50,10 +54,10 @@ public abstract class AbstractArrayStorageTest {
     @Test(expected = StorageException.class)
     public void saveOverflowLimit() {
         try {
-            while (storage.size() < 10_000) {
+            while (storage.size() < AbstractArrayStorage.STORAGE_LIMIT_SIZE) {
                 storage.save(new Resume());
             }
-        } catch (Exception e) {
+        } catch (StorageException e) {
             Assert.fail("Unexpected exception before array is filled");
         }
         storage.save(new Resume());
@@ -61,9 +65,12 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void update() {
-        Resume resume = new Resume(UUID_1);
-        storage.update(resume);
-        Assert.assertSame(resume, storage.get(resume.getUuid()));
+        Resume newResume = new Resume(UUID_1);
+        storage.update(newResume);
+
+        // only for Array based implementations
+        Assert.assertSame(newResume, storage.get(newResume.getUuid()));
+        //assertGet(newResume); TODO: uncomment later for nonArray based implementations
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -75,7 +82,7 @@ public abstract class AbstractArrayStorageTest {
     public void delete() {
         int size = storage.size();
         storage.delete(UUID_1);
-        Assert.assertEquals(size - 1, storage.size());
+        assertSize(size - 1);
         storage.get(UUID_1);
     }
 
@@ -86,8 +93,9 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void get() {
-        Resume resume = new Resume(UUID_2);
-        Assert.assertNotSame(resume, storage.get(UUID_2));
+        assertGet(RESUME_1);
+        assertGet(RESUME_2);
+        assertGet(RESUME_3);
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -97,11 +105,19 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void getAll() {
-        Assert.assertEquals(3, storage.getAll().length);
+        assertEquals(3, storage.getAll().length);
     }
 
     @Test
     public void size() {
-        Assert.assertEquals(3, storage.size());
+        assertSize(3);
+    }
+
+    private void assertSize(int size) {
+        assertEquals(size, storage.size());
+    }
+
+    private void assertGet(Resume resume) {
+        assertEquals(resume, storage.get(resume.getUuid()));
     }
 }
