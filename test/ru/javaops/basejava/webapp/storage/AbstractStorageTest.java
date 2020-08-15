@@ -10,7 +10,7 @@ import ru.javaops.basejava.webapp.model.Resume;
 
 import static org.junit.Assert.assertEquals;
 
-public abstract class AbstractArrayStorageTest {
+public abstract class AbstractStorageTest {
     private final Storage storage;
 
     private static final String UUID_1 = "uuidZ";
@@ -21,7 +21,7 @@ public abstract class AbstractArrayStorageTest {
     private static final Resume RESUME_3 = new Resume(UUID_3);
     private static final Resume RESUME_4 = new Resume();
 
-    protected AbstractArrayStorageTest(Storage storage) {
+    protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
 
@@ -67,10 +67,7 @@ public abstract class AbstractArrayStorageTest {
     public void update() {
         Resume newResume = new Resume(UUID_1);
         storage.update(newResume);
-
-        // only for Array based implementations
-        Assert.assertSame(newResume, storage.get(newResume.getUuid()));
-        //assertGet(newResume); TODO: uncomment later for nonArray based implementations
+        assertGet(newResume);
     }
 
     @Test(expected = NotExistStorageException.class)

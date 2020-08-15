@@ -22,7 +22,7 @@ public final class ArrayStorage extends AbstractArrayStorage {
      * @return index in array storage for this Resume, or -1 if none
      */
     @Override
-    protected int findIndex(String uuid) {
+    protected int findByUuid(String uuid) {
         for (int i = 0; i < size; i++) {
             if (uuid.equals(storage[i].getUuid())) {
                 return i;
