@@ -3,7 +3,6 @@ package ru.javaops.basejava.webapp.storage;
 import ru.javaops.basejava.webapp.model.Resume;
 
 public interface Storage {
-    void clear();
 
     void save(Resume resume);
 
@@ -12,6 +11,8 @@ public interface Storage {
     void delete(String uuid);
 
     Resume get(String uuid);
+
+    void clear();
 
     Resume[] getAll();
 

@@ -29,7 +29,7 @@ public final class SortedArrayStorage extends AbstractArrayStorage {
      * @see Arrays#binarySearch(Object[], int, int, Object)
      */
     @Override
-    protected int findByUuid(String uuid) {
+    protected int searchByUuid(String uuid) {
         Resume searchKey = new Resume(uuid);
         return Arrays.binarySearch(storage, 0, size, searchKey);
     }

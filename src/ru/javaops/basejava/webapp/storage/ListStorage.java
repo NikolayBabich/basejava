@@ -10,36 +10,8 @@ public final class ListStorage extends AbstractStorage {
     private final List<Resume> storage = new ArrayList<>();
 
     @Override
-    protected int findByUuid(String uuid) {
-        Collections.sort(storage);
-        return Collections.binarySearch(storage, new Resume(uuid));
-    }
-
-    @Override
     public void clear() {
         storage.clear();
-    }
-
-    @Override
-    public void save(Resume resume) {
-        checkNotExist(resume.getUuid());
-        storage.add(resume);
-    }
-
-    @Override
-    public void update(Resume resume) {
-       int index = checkExist(resume.getUuid());
-       storage.set(index, resume);
-    }
-
-    @Override
-    public void delete(String uuid) {
-        storage.remove(checkExist(uuid));
-    }
-
-    @Override
-    public Resume get(String uuid) {
-        return storage.get(checkExist(uuid));
     }
 
     @Override
@@ -50,5 +22,31 @@ public final class ListStorage extends AbstractStorage {
     @Override
     public int size() {
         return storage.size();
+    }
+
+    @Override
+    protected void saveImpl(int index, Resume resume) {
+        storage.add(resume);
+    }
+
+    @Override
+    protected void updateImpl(int index, Resume resume) {
+        storage.set(index, resume);
+    }
+
+    @Override
+    protected void deleteImpl(int index, String uuid) {
+        storage.remove(index);
+    }
+
+    @Override
+    protected Resume getImpl(int index, String uuid) {
+        return storage.get(index);
+    }
+
+    @Override
+    protected int searchByUuid(String uuid) {
+        Collections.sort(storage);
+        return Collections.binarySearch(storage, new Resume(uuid));
     }
 }
