@@ -1,17 +1,17 @@
 package ru.javaops.basejava.webapp.storage;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import ru.javaops.basejava.webapp.exception.ExistStorageException;
 import ru.javaops.basejava.webapp.exception.NotExistStorageException;
-import ru.javaops.basejava.webapp.exception.StorageException;
 import ru.javaops.basejava.webapp.model.Resume;
+
+import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
-    private final Storage storage;
+    protected final Storage storage;
 
     private static final String UUID_1 = "uuidZ";
     private static final Resume RESUME_1 = new Resume(UUID_1);
@@ -49,18 +49,6 @@ public abstract class AbstractStorageTest {
     @Test(expected = ExistStorageException.class)
     public void saveExist() {
         storage.save(new Resume(UUID_2));
-    }
-
-    @Test(expected = StorageException.class)
-    public void saveOverflowLimit() {
-        try {
-            while (storage.size() < AbstractArrayStorage.STORAGE_LIMIT_SIZE) {
-                storage.save(new Resume());
-            }
-        } catch (StorageException e) {
-            Assert.fail("Unexpected exception before array is filled");
-        }
-        storage.save(new Resume());
     }
 
     @Test
@@ -102,7 +90,12 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void getAll() {
-        assertEquals(3, storage.getAll().length);
+        Resume[] resumes = storage.getAll();
+        assertEquals(3, resumes.length);
+        Arrays.sort(resumes);
+        assertEquals(RESUME_2, resumes[0]);
+        assertEquals(RESUME_3, resumes[1]);
+        assertEquals(RESUME_1, resumes[2]);
     }
 
     @Test
