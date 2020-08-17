@@ -45,6 +45,6 @@ public final class MapStorage extends AbstractStorage {
 
     @Override
     protected int searchByUuid(String uuid) {
-        return storage.get(uuid) == null ? -1 : 0;
+        return storage.containsKey(uuid) ? 0 : -1;
     }
 }

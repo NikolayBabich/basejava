@@ -26,7 +26,8 @@ public final class ListStorage extends AbstractStorage {
 
     @Override
     protected void saveImpl(int index, Resume resume) {
-        storage.add(resume);
+        index = -index - 1;
+        storage.add(index, resume);
     }
 
     @Override
@@ -46,7 +47,6 @@ public final class ListStorage extends AbstractStorage {
 
     @Override
     protected int searchByUuid(String uuid) {
-        Collections.sort(storage);
         return Collections.binarySearch(storage, new Resume(uuid));
     }
 }
