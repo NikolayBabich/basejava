@@ -41,12 +41,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected final void saveImpl(int index, Resume resume) {
+    protected final void saveImpl(Object index, Resume resume) {
         if (size >= STORAGE_LIMIT_SIZE) {
             throw new StorageException("Resume storage limit size has been reached",
-                                        resume.getUuid());
+                    resume.getUuid());
         }
-        insert(index, resume);
+        insert((Integer) index, resume);
         size++;
     }
 
@@ -57,13 +57,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected abstract void insert(int index, Resume resume);
 
     @Override
-    protected final void updateImpl(int index, Resume resume) {
-        storage[index] = resume;
+    protected final void updateImpl(Object index, Resume resume) {
+        storage[(Integer) index] = resume;
     }
 
     @Override
-    protected final void deleteImpl(int index, String uuid) {
-        remove(index);
+    protected final void deleteImpl(Object index) {
+        remove((Integer) index);
         storage[size - 1] = null;
         size--;
     }
@@ -74,7 +74,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected abstract void remove(int index);
 
     @Override
-    protected final Resume getImpl(int index, String uuid) {
-        return storage[index];
+    protected final Resume getImpl(Object index) {
+        return storage[(Integer) index];
+    }
+
+    @Override
+    protected boolean isExists(Object index) {
+        return (Integer) index >= 0;
     }
 }

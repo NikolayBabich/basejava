@@ -3,7 +3,6 @@ package ru.javaops.basejava.webapp.storage;
 import ru.javaops.basejava.webapp.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public final class ListStorage extends AbstractStorage {
@@ -25,28 +24,37 @@ public final class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveImpl(int index, Resume resume) {
-        index = -index - 1;
-        storage.add(index, resume);
+    protected void saveImpl(Object searchKey, Resume resume) {
+        storage.add(resume);
     }
 
     @Override
-    protected void updateImpl(int index, Resume resume) {
-        storage.set(index, resume);
+    protected void updateImpl(Object index, Resume resume) {
+        storage.set((Integer) index, resume);
     }
 
     @Override
-    protected void deleteImpl(int index, String uuid) {
-        storage.remove(index);
+    protected void deleteImpl(Object index) {
+        storage.remove(((Integer) index).intValue());
     }
 
     @Override
-    protected Resume getImpl(int index, String uuid) {
-        return storage.get(index);
+    protected Resume getImpl(Object index) {
+        return storage.get((Integer) index);
     }
 
     @Override
-    protected int searchByUuid(String uuid) {
-        return Collections.binarySearch(storage, new Resume(uuid));
+    protected Integer getSpecificSearchKey(String uuid) {
+        for (int i = 0; i < storage.size(); i++) {
+            if (storage.get(i).getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    protected boolean isExists(Object index) {
+        return index != null;
     }
 }
