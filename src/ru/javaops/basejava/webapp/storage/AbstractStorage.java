@@ -5,10 +5,17 @@ import ru.javaops.basejava.webapp.exception.NotExistStorageException;
 import ru.javaops.basejava.webapp.exception.StorageException;
 import ru.javaops.basejava.webapp.model.Resume;
 
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Abstract storage for Resumes
  */
 public abstract class AbstractStorage implements Storage {
+    private static final Comparator<Resume> DEFAULT_RESUME_COMPARATOR =
+            Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
 
     /**
      * @param resume Resume to be saved to this storage
@@ -65,7 +72,7 @@ public abstract class AbstractStorage implements Storage {
      */
     private Object getExistedSearchKey(String uuid) {
         Object searchKey = getSpecificSearchKey(uuid);
-        if (!(isExists(searchKey))) {
+        if (!isExists(searchKey)) {
             throw new NotExistStorageException(uuid);
         }
         return searchKey;
@@ -99,4 +106,18 @@ public abstract class AbstractStorage implements Storage {
      * @return {@code true} if the Resume exists in this storage, {@code false} otherwise
      */
     protected abstract boolean isExists(Object searchKey);
+
+    /**
+     * @return {@code List} containing all Resumes sorted
+     *          with {@code DEFAULT_RESUME_COMPARATOR}
+     */
+    @Override
+    public final List<Resume> getAllSorted() {
+        Collection<Resume> resumes = getAllResumes();
+        return resumes.stream()
+                .sorted(DEFAULT_RESUME_COMPARATOR)
+                .collect(Collectors.toList());
+    }
+
+    protected abstract Collection<Resume> getAllResumes();
 }

@@ -3,6 +3,7 @@ package ru.javaops.basejava.webapp.storage;
 import ru.javaops.basejava.webapp.model.Resume;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public final class ListStorage extends AbstractStorage {
@@ -11,11 +12,6 @@ public final class ListStorage extends AbstractStorage {
     @Override
     public void clear() {
         storage.clear();
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return storage.toArray(new Resume[0]);
     }
 
     @Override
@@ -56,5 +52,10 @@ public final class ListStorage extends AbstractStorage {
     @Override
     protected boolean isExists(Object index) {
         return index != null;
+    }
+
+    @Override
+    protected Collection<Resume> getAllResumes() {
+        return new ArrayList<>(storage);
     }
 }
