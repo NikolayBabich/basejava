@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public final class ListStorage extends AbstractStorage {
+public final class ListStorage extends AbstractStorage<Integer> {
     private final List<Resume> storage = new ArrayList<>();
 
     @Override
@@ -20,23 +20,23 @@ public final class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveImpl(Object searchKey, Resume resume) {
+    protected void saveImpl(Integer searchKey, Resume resume) {
         storage.add(resume);
     }
 
     @Override
-    protected void updateImpl(Object index, Resume resume) {
-        storage.set((Integer) index, resume);
+    protected void updateImpl(Integer index, Resume resume) {
+        storage.set(index, resume);
     }
 
     @Override
-    protected void deleteImpl(Object index) {
-        storage.remove(((Integer) index).intValue());
+    protected void deleteImpl(Integer index) {
+        storage.remove(index.intValue());
     }
 
     @Override
-    protected Resume getImpl(Object index) {
-        return storage.get((Integer) index);
+    protected Resume getImpl(Integer index) {
+        return storage.get(index);
     }
 
     @Override
@@ -50,7 +50,7 @@ public final class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean isExists(Object index) {
+    protected boolean isExists(Integer index) {
         return index != null;
     }
 

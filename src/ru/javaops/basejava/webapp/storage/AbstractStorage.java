@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * Abstract storage for Resumes
  */
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<SK> implements Storage {
     private static final Comparator<Resume> DEFAULT_RESUME_COMPARATOR =
             Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
 
@@ -27,7 +27,7 @@ public abstract class AbstractStorage implements Storage {
         saveImpl(getNotExistedSearchKey(resume.getUuid()), resume);
     }
 
-    protected abstract void saveImpl(Object searchKey, Resume resume);
+    protected abstract void saveImpl(SK searchKey, Resume resume);
 
     /**
      * @param resume Resume to replace one with the same uuid in this storage
@@ -38,7 +38,7 @@ public abstract class AbstractStorage implements Storage {
         updateImpl(getExistedSearchKey(resume.getUuid()), resume);
     }
 
-    protected abstract void updateImpl(Object searchKey, Resume resume);
+    protected abstract void updateImpl(SK searchKey, Resume resume);
 
     /**
      * @param uuid identifier of Resume to be deleted from this storage
@@ -49,7 +49,7 @@ public abstract class AbstractStorage implements Storage {
         deleteImpl(getExistedSearchKey(uuid));
     }
 
-    protected abstract void deleteImpl(Object searchKey);
+    protected abstract void deleteImpl(SK searchKey);
 
     /**
      * @param uuid identifier of Resume to be returned
@@ -61,7 +61,7 @@ public abstract class AbstractStorage implements Storage {
         return getImpl(getExistedSearchKey(uuid));
     }
 
-    protected abstract Resume getImpl(Object searchKey);
+    protected abstract Resume getImpl(SK searchKey);
 
     /**
      * Returns search key if Resume with {@code uuid} already exists in this storage
@@ -70,8 +70,8 @@ public abstract class AbstractStorage implements Storage {
      * @return abstract search key (concrete specification in implementations) for the Resume
      * @throws NotExistStorageException if the Resume doesn't exist in this storage
      */
-    private Object getExistedSearchKey(String uuid) {
-        Object searchKey = getSpecificSearchKey(uuid);
+    private SK getExistedSearchKey(String uuid) {
+        SK searchKey = getSpecificSearchKey(uuid);
         if (!isExists(searchKey)) {
             throw new NotExistStorageException(uuid);
         }
@@ -85,8 +85,8 @@ public abstract class AbstractStorage implements Storage {
      * @return specific search key (depending on implementation) for the Resume
      * @throws ExistStorageException if the Resume already exists in this storage
      */
-    private Object getNotExistedSearchKey(String uuid) {
-        Object searchKey = getSpecificSearchKey(uuid);
+    private SK getNotExistedSearchKey(String uuid) {
+        SK searchKey = getSpecificSearchKey(uuid);
         if (isExists(searchKey)) {
             throw new ExistStorageException(uuid);
         }
@@ -97,7 +97,7 @@ public abstract class AbstractStorage implements Storage {
      * @param uuid identifier of the Resume to be searched for
      * @return specific search key (depending on implementation) for the Resume
      */
-    protected abstract Object getSpecificSearchKey(String uuid);
+    protected abstract SK getSpecificSearchKey(String uuid);
 
     /**
      * Checks whether the Resume with specific search key already exists in this storage
@@ -105,7 +105,7 @@ public abstract class AbstractStorage implements Storage {
      * @param searchKey specific search key (depending on implementation) for the Resume
      * @return {@code true} if the Resume exists in this storage, {@code false} otherwise
      */
-    protected abstract boolean isExists(Object searchKey);
+    protected abstract boolean isExists(SK searchKey);
 
     /**
      * @return {@code List} containing all Resumes sorted

@@ -1,11 +1,11 @@
 package ru.javaops.basejava.webapp.model;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 import java.util.UUID;
 
-/**
- * Initial resume class
- */
-public final class Resume {
+public final class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
 
@@ -13,7 +13,9 @@ public final class Resume {
         this(UUID.randomUUID().toString().substring(0, 8), fullName);
     }
 
-    public Resume(String uuid, String fullName) {
+    public Resume(@NotNull String uuid, @NotNull String fullName) {
+        Objects.requireNonNull(uuid, "uuid must not be null");
+        Objects.requireNonNull(fullName, "fullName must not be null");
         this.uuid = uuid;
         this.fullName = fullName;
     }
@@ -50,5 +52,10 @@ public final class Resume {
                 "uuid='" + uuid + '\'' +
                 ", fullName='" + fullName + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(@NotNull Resume o) {
+        return uuid.compareTo(o.getUuid());
     }
 }

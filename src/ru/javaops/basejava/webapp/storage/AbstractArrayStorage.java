@@ -9,7 +9,7 @@ import java.util.Collection;
 /**
  * Array based storage for Resumes
  */
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     static final int STORAGE_LIMIT_SIZE = 10_000;
 
     protected final Resume[] storage = new Resume[STORAGE_LIMIT_SIZE];
@@ -34,12 +34,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected final void saveImpl(Object index, Resume resume) {
+    protected final void saveImpl(Integer index, Resume resume) {
         if (size >= STORAGE_LIMIT_SIZE) {
             throw new StorageException("Resume storage limit size has been reached",
                     resume.getUuid());
         }
-        insert((Integer) index, resume);
+        insert(index, resume);
         size++;
     }
 
@@ -50,13 +50,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected abstract void insert(int index, Resume resume);
 
     @Override
-    protected final void updateImpl(Object index, Resume resume) {
-        storage[(Integer) index] = resume;
+    protected final void updateImpl(Integer index, Resume resume) {
+        storage[index] = resume;
     }
 
     @Override
-    protected final void deleteImpl(Object index) {
-        remove((Integer) index);
+    protected final void deleteImpl(Integer index) {
+        remove(index);
         storage[size - 1] = null;
         size--;
     }
@@ -67,18 +67,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected abstract void remove(int index);
 
     @Override
-    protected final Resume getImpl(Object index) {
-        return storage[(Integer) index];
+    protected final Resume getImpl(Integer index) {
+        return storage[index];
     }
 
     @Override
-    protected boolean isExists(Object index) {
-        return (Integer) index >= 0;
+    protected boolean isExists(Integer index) {
+        return index >= 0;
     }
 
     @Override
     protected Collection<Resume> getAllResumes() {
-        Resume[] validResumes = Arrays.copyOf(storage, size);
-        return Arrays.asList(validResumes);
+        return Arrays.asList(Arrays.copyOf(storage, size));
     }
 }

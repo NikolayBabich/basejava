@@ -2,16 +2,16 @@ package ru.javaops.basejava.webapp.storage;
 
 import ru.javaops.basejava.webapp.model.Resume;
 
-public final class MapResumeStorage extends AbstractMapStorage {
+public final class MapResumeStorage extends AbstractMapStorage<Resume> {
 
     @Override
-    protected void deleteImpl(Object resume) {
-        storage.remove(((Resume) resume).getUuid());
+    protected void deleteImpl(Resume resume) {
+        storage.remove(resume.getUuid());
     }
 
     @Override
-    protected Resume getImpl(Object resume) {
-        return (Resume) resume;
+    protected Resume getImpl(Resume resume) {
+        return resume;
     }
 
     @Override
@@ -20,7 +20,7 @@ public final class MapResumeStorage extends AbstractMapStorage {
     }
 
     @Override
-    protected boolean isExists(Object resume) {
+    protected boolean isExists(Resume resume) {
         return resume != null;
     }
 }

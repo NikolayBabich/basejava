@@ -2,18 +2,16 @@ package ru.javaops.basejava.webapp.storage;
 
 import ru.javaops.basejava.webapp.model.Resume;
 
-public final class MapUuidStorage extends AbstractMapStorage {
+public final class MapUuidStorage extends AbstractMapStorage<String> {
 
-    @SuppressWarnings({"RedundantCast"})
     @Override
-    protected void deleteImpl(Object uuid) {
-        storage.remove((String) uuid);
+    protected void deleteImpl(String uuid) {
+        storage.remove(uuid);
     }
 
-    @SuppressWarnings({"RedundantCast"})
     @Override
-    protected Resume getImpl(Object uuid) {
-        return storage.get((String) uuid);
+    protected Resume getImpl(String uuid) {
+        return storage.get(uuid);
     }
 
     @Override
@@ -21,9 +19,8 @@ public final class MapUuidStorage extends AbstractMapStorage {
         return uuid;
     }
 
-    @SuppressWarnings({"RedundantCast"})
     @Override
-    protected boolean isExists(Object uuid) {
-        return storage.containsKey((String) uuid);
+    protected boolean isExists(String uuid) {
+        return storage.containsKey(uuid);
     }
 }
