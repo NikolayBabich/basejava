@@ -3,40 +3,37 @@ package ru.javaops.basejava.webapp.model;
 import java.time.LocalDate;
 
 class DatedEntry {
-    private String name;
-    private LocalDate startDate;
-    private LocalDate finishDate;
-    private String text;
+    private final String textLink;
+    private final String urlLink;
+    private final LocalDate startDate;
+    private final LocalDate finishDate;
+    private final String text;
 
-    public String getName() {
-        return name;
+    public String getTextLink() {
+        return textLink;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getUrlLink() {
+        return urlLink;
     }
 
     public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
     public LocalDate getFinishDate() {
         return finishDate;
-    }
-
-    public void setFinishDate(LocalDate finishDate) {
-        this.finishDate = finishDate;
     }
 
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
+    public DatedEntry(String textLink, String urlLink, LocalDate startDate, LocalDate finishDate, String text) {
+        this.textLink = textLink;
+        this.urlLink = urlLink;
+        this.startDate = startDate;
+        this.finishDate = finishDate;
         this.text = text;
     }
 }

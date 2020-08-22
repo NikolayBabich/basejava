@@ -1,14 +1,12 @@
 package ru.javaops.basejava.webapp.model;
 
-import java.net.URL;
-
 public class ContactType {
-    private final String name;
+    private final String text;
     private final String linkText;
-    private final URL linkUrl;
+    private final String linkUrl;
 
-    public ContactType(String name, String linkText, URL linkUrl) {
-        this.name = name;
+    public ContactType(String text, String linkText, String linkUrl) {
+        this.text = text;
         this.linkText = linkText;
         this.linkUrl = linkUrl;
     }
