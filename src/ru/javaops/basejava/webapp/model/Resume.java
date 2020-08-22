@@ -2,12 +2,16 @@ package ru.javaops.basejava.webapp.model;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
 public final class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
+    private Map<String, ContactType> contacts;
+    private List<Section<?>> sections;
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString().substring(0, 8), fullName);
