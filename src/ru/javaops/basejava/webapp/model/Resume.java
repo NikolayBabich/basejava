@@ -2,6 +2,7 @@ package ru.javaops.basejava.webapp.model;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,9 +24,10 @@ public final class Resume implements Comparable<Resume> {
         Objects.requireNonNull(fullName, "fullName must not be null");
         this.uuid = uuid;
         this.fullName = fullName;
-        contacts = new HashMap<>();
-        sections = new EnumMap<>(SectionType.class);
-        initializeSections(sections);
+        this.contacts = new HashMap<>();
+        Map<SectionType, Section<?>> tempSections = new EnumMap<>(SectionType.class);
+        initializeSections(tempSections);
+        this.sections = Collections.unmodifiableMap(tempSections);
     }
 
     private void initializeSections(Map<SectionType, Section<?>> sections) {
@@ -61,22 +63,26 @@ public final class Resume implements Comparable<Resume> {
         Resume resume = (Resume) o;
 
         if (!uuid.equals(resume.uuid)) return false;
-        return fullName.equals(resume.fullName);
+        if (!fullName.equals(resume.fullName)) return false;
+        if (!contacts.equals(resume.contacts)) return false;
+        return sections.equals(resume.sections);
     }
 
     @Override
     public int hashCode() {
         int result = uuid.hashCode();
         result = 31 * result + fullName.hashCode();
+        result = 31 * result + contacts.hashCode();
+        result = 31 * result + sections.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
-        return "Resume{" +
-                "uuid='" + uuid + '\'' +
-                ", fullName='" + fullName + '\'' +
-                '}';
+        return "Resume #" + uuid +
+                ", fullName='" + fullName + "'\n\n" +
+                contacts + "\n\n" +
+                sections;
     }
 
     @Override

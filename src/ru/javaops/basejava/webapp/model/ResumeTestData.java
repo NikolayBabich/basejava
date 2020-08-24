@@ -79,6 +79,14 @@ public final class ResumeTestData {
         TimeListSection experience = (TimeListSection) resume.getSections().get(SectionType.EXPERIENCE);
         List<DatedEntry> timeContent = new ArrayList<>();
         timeContent.add(new DatedEntry(
+                "Java Online Projects",
+                "http://javaops.ru/",
+                LocalDate.of(2013, 10, 1),
+                null,
+                "Автор проекта.\n" +
+                        "Создание, организация и проведение Java онлайн проектов и стажировок.")
+        );
+        timeContent.add(new DatedEntry(
                 "Wrike",
                 "https://www.wrike.com/",
                 LocalDate.of(2014, 10, 1),
@@ -130,5 +138,11 @@ public final class ResumeTestData {
                 "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"")
         );
         education.setContent(timeContent);
+
+        System.out.println(resume.getFullName());
+        System.out.println();
+        System.out.println(resume.getContacts());
+        System.out.println();
+        System.out.println(resume.getSections());
     }
 }
