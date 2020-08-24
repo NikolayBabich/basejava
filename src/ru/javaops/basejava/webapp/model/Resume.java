@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -12,7 +11,7 @@ import java.util.UUID;
 public final class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
-    private final Map<String, ContactType> contacts;
+    private final Map<ContactType, Link> contacts = new EnumMap<>(ContactType.class);
     private final Map<SectionType, Section<?>> sections;
 
     public Resume(String fullName) {
@@ -24,19 +23,19 @@ public final class Resume implements Comparable<Resume> {
         Objects.requireNonNull(fullName, "fullName must not be null");
         this.uuid = uuid;
         this.fullName = fullName;
-        this.contacts = new HashMap<>();
+
         Map<SectionType, Section<?>> tempSections = new EnumMap<>(SectionType.class);
         initializeSections(tempSections);
         this.sections = Collections.unmodifiableMap(tempSections);
     }
 
     private void initializeSections(Map<SectionType, Section<?>> sections) {
-        sections.put(SectionType.OBJECTIVE, new TextSection(SectionType.OBJECTIVE));
-        sections.put(SectionType.PERSONAL, new TextSection(SectionType.PERSONAL));
-        sections.put(SectionType.ACHIEVEMENT, new ListSection(SectionType.ACHIEVEMENT));
-        sections.put(SectionType.QUALIFICATIONS, new ListSection(SectionType.QUALIFICATIONS));
-        sections.put(SectionType.EXPERIENCE, new TimeListSection(SectionType.EXPERIENCE));
-        sections.put(SectionType.EDUCATION, new TimeListSection(SectionType.EDUCATION));
+        sections.put(SectionType.OBJECTIVE, new TextSection());
+        sections.put(SectionType.PERSONAL, new TextSection());
+        sections.put(SectionType.ACHIEVEMENT, new ListSection());
+        sections.put(SectionType.QUALIFICATIONS, new ListSection());
+        sections.put(SectionType.EXPERIENCE, new OrganizationSection());
+        sections.put(SectionType.EDUCATION, new OrganizationSection());
     }
 
     public String getUuid() {
@@ -47,7 +46,7 @@ public final class Resume implements Comparable<Resume> {
         return fullName;
     }
 
-    public Map<String, ContactType> getContacts() {
+    public Map<ContactType, Link> getContacts() {
         return contacts;
     }
 

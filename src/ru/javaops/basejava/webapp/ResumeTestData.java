@@ -1,4 +1,13 @@
-package ru.javaops.basejava.webapp.model;
+package ru.javaops.basejava.webapp;
+
+import ru.javaops.basejava.webapp.model.ContactType;
+import ru.javaops.basejava.webapp.model.Experience;
+import ru.javaops.basejava.webapp.model.Link;
+import ru.javaops.basejava.webapp.model.ListSection;
+import ru.javaops.basejava.webapp.model.OrganizationSection;
+import ru.javaops.basejava.webapp.model.Resume;
+import ru.javaops.basejava.webapp.model.SectionType;
+import ru.javaops.basejava.webapp.model.TextSection;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,37 +18,31 @@ public final class ResumeTestData {
     public static void main(String[] args) {
         Resume resume = new Resume("Григорий Кислин");
 
-        Map<String, ContactType> contacts = resume.getContacts();
-        contacts.put("phone", new ContactType(
-                "Тел.: +7(921) 855-0482",
-                "",
+        Map<ContactType, Link> contacts = resume.getContacts();
+        contacts.put(ContactType.PHONE_NUMBER, new Link(
+                "+7(921) 855-0482",
                 null)
         );
-        contacts.put("skype", new ContactType(
-                "Skype: ",
+        contacts.put(ContactType.SKYPE, new Link(
                 "grigory.kislin",
                 "skype:grigory.kislin")
         );
-        contacts.put("email", new ContactType(
-                "Почта: ",
+        contacts.put(ContactType.EMAIL, new Link(
                 "gkislin@yandex.ru",
                 "mailto:gkislin@yandex.ru"));
-        contacts.put("linkedIn", new ContactType(
-                "",
+        contacts.put(ContactType.LINKEDIN, new Link(
                 "Профиль LinkedIn",
                 "https://www.linkedin.com/in/gkislin")
         );
-        contacts.put("gitHub", new ContactType(
-                "",
+        contacts.put(ContactType.GITHUB, new Link(
                 "Профиль GitHub",
                 "https://github.com/gkislin")
         );
-        contacts.put("stackoverflow", new ContactType(
-                "",
+        contacts.put(ContactType.STACKOVERFLOW, new Link(
                 "Профиль Stackoverflow",
                 "https://stackoverflow.com/users/548473")
         );
-        contacts.put("homePage", new ContactType("",
+        contacts.put(ContactType.HOME_PAGE, new Link(
                 "Домашняя страница",
                 "http://gkislin.ru/")
         );
@@ -76,19 +79,17 @@ public final class ResumeTestData {
         content.add("JavaScript: jQuery, ExtJS, Bootstrap.js, underscore.js");
         qualifications.setContent(content);
 
-        TimeListSection experience = (TimeListSection) resume.getSections().get(SectionType.EXPERIENCE);
-        List<TimeListSection.DatedEntry> timeContent = new ArrayList<>();
-        timeContent.add(new TimeListSection.DatedEntry(
-                "Java Online Projects",
-                "http://javaops.ru/",
+        OrganizationSection experience = (OrganizationSection) resume.getSections().get(SectionType.EXPERIENCE);
+        List<Experience> timeContent = new ArrayList<>();
+        timeContent.add(new Experience(
+                new Link("Java Online Projects", "http://javaops.ru/"),
                 LocalDate.of(2013, 10, 1),
-                null,
+                LocalDate.MAX,
                 "Автор проекта.\n" +
                         "Создание, организация и проведение Java онлайн проектов и стажировок.")
         );
-        timeContent.add(new TimeListSection.DatedEntry(
-                "Wrike",
-                "https://www.wrike.com/",
+        timeContent.add(new Experience(
+                new Link("Wrike", "https://www.wrike.com/"),
                 LocalDate.of(2014, 10, 1),
                 LocalDate.of(2016, 1, 1),
                 "Старший разработчик (backend)\n" +
@@ -96,9 +97,8 @@ public final class ResumeTestData {
                         "Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, " +
                         "Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.")
         );
-        timeContent.add(new TimeListSection.DatedEntry(
-                "RIT Center",
-                null,
+        timeContent.add(new Experience(
+                new Link("RIT Center", null),
                 LocalDate.of(2012, 4, 1),
                 LocalDate.of(2014, 10, 1),
                 "Java архитектор\n" +
@@ -107,9 +107,8 @@ public final class ResumeTestData {
                         "Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура " +
                         "БД и серверной части системы.")
         );
-        timeContent.add(new TimeListSection.DatedEntry(
-                "Luxoft (Deutsche Bank)",
-                "http://www.luxoft.ru/",
+        timeContent.add(new Experience(
+                new Link("Luxoft (Deutsche Bank)", "http://www.luxoft.ru/"),
                 LocalDate.of(2010, 12, 1),
                 LocalDate.of(2012, 4, 1),
                 "Ведущий программист\n" +
@@ -121,28 +120,22 @@ public final class ResumeTestData {
         );
         experience.setContent(timeContent);
 
-        TimeListSection education = (TimeListSection) resume.getSections().get(SectionType.EDUCATION);
+        OrganizationSection education = (OrganizationSection) resume.getSections().get(SectionType.EDUCATION);
         timeContent = new ArrayList<>();
-        timeContent.add(new TimeListSection.DatedEntry(
-                "Coursera",
-                "https://www.coursera.org/course/progfun",
+        timeContent.add(new Experience(
+                new Link("Coursera", "https://www.coursera.org/course/progfun"),
                 LocalDate.of(2013, 3, 1),
                 LocalDate.of(2013, 5, 1),
                 "\"Functional Programming Principles in Scala\" by Martin Odersky")
         );
-        timeContent.add(new TimeListSection.DatedEntry(
-                "Luxoft",
-                "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366",
+        timeContent.add(new Experience(
+                new Link("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"),
                 LocalDate.of(2011, 3, 1),
                 LocalDate.of(2011, 4, 1),
                 "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"")
         );
         education.setContent(timeContent);
 
-        System.out.println(resume.getFullName());
-        System.out.println();
-        System.out.println(resume.getContacts());
-        System.out.println();
-        System.out.println(resume.getSections());
+        System.out.println(resume);
     }
 }
