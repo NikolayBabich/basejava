@@ -77,8 +77,8 @@ public final class ResumeTestData {
         qualifications.setContent(content);
 
         TimeListSection experience = (TimeListSection) resume.getSections().get(SectionType.EXPERIENCE);
-        List<DatedEntry> timeContent = new ArrayList<>();
-        timeContent.add(new DatedEntry(
+        List<TimeListSection.DatedEntry> timeContent = new ArrayList<>();
+        timeContent.add(new TimeListSection.DatedEntry(
                 "Java Online Projects",
                 "http://javaops.ru/",
                 LocalDate.of(2013, 10, 1),
@@ -86,7 +86,7 @@ public final class ResumeTestData {
                 "Автор проекта.\n" +
                         "Создание, организация и проведение Java онлайн проектов и стажировок.")
         );
-        timeContent.add(new DatedEntry(
+        timeContent.add(new TimeListSection.DatedEntry(
                 "Wrike",
                 "https://www.wrike.com/",
                 LocalDate.of(2014, 10, 1),
@@ -96,7 +96,7 @@ public final class ResumeTestData {
                         "Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, " +
                         "Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.")
         );
-        timeContent.add(new DatedEntry(
+        timeContent.add(new TimeListSection.DatedEntry(
                 "RIT Center",
                 null,
                 LocalDate.of(2012, 4, 1),
@@ -107,7 +107,7 @@ public final class ResumeTestData {
                         "Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура " +
                         "БД и серверной части системы.")
         );
-        timeContent.add(new DatedEntry(
+        timeContent.add(new TimeListSection.DatedEntry(
                 "Luxoft (Deutsche Bank)",
                 "http://www.luxoft.ru/",
                 LocalDate.of(2010, 12, 1),
@@ -123,14 +123,14 @@ public final class ResumeTestData {
 
         TimeListSection education = (TimeListSection) resume.getSections().get(SectionType.EDUCATION);
         timeContent = new ArrayList<>();
-        timeContent.add(new DatedEntry(
+        timeContent.add(new TimeListSection.DatedEntry(
                 "Coursera",
                 "https://www.coursera.org/course/progfun",
                 LocalDate.of(2013, 3, 1),
                 LocalDate.of(2013, 5, 1),
                 "\"Functional Programming Principles in Scala\" by Martin Odersky")
         );
-        timeContent.add(new DatedEntry(
+        timeContent.add(new TimeListSection.DatedEntry(
                 "Luxoft",
                 "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366",
                 LocalDate.of(2011, 3, 1),
