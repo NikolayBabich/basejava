@@ -14,7 +14,13 @@ public final class Resume implements Comparable<Resume> {
     private final Map<ContactType, Link> contacts = new EnumMap<>(ContactType.class);
     private final Map<SectionType, AbstractSection<?>> sections;
 
-    public Resume(String fullName) {
+    {
+        Map<SectionType, AbstractSection<?>> tempSections = new EnumMap<>(SectionType.class);
+        initializeSections(tempSections);
+        this.sections = Collections.unmodifiableMap(tempSections);
+    }
+
+    public Resume(@NotNull String fullName) {
         this(UUID.randomUUID().toString().substring(0, 8), fullName);
     }
 
@@ -23,10 +29,6 @@ public final class Resume implements Comparable<Resume> {
         Objects.requireNonNull(fullName, "fullName must not be null");
         this.uuid = uuid;
         this.fullName = fullName;
-
-        Map<SectionType, AbstractSection<?>> tempSections = new EnumMap<>(SectionType.class);
-        initializeSections(tempSections);
-        this.sections = Collections.unmodifiableMap(tempSections);
     }
 
     private void initializeSections(Map<SectionType, AbstractSection<?>> sections) {
@@ -38,20 +40,38 @@ public final class Resume implements Comparable<Resume> {
         sections.put(SectionType.EDUCATION, new OrganizationSection());
     }
 
+    @NotNull
     public String getUuid() {
         return uuid;
     }
 
+    @NotNull
     public String getFullName() {
         return fullName;
     }
 
+    @NotNull
     public Map<ContactType, Link> getContacts() {
         return contacts;
     }
 
+    @NotNull
     public Map<SectionType, AbstractSection<?>> getSections() {
         return sections;
+    }
+
+    @NotNull
+    public Link getContact(ContactType type) {
+        return contacts.get(type);
+    }
+
+    public void setContact(ContactType type, @NotNull Link contact) {
+        contacts.put(type, contact);
+    }
+
+    @NotNull
+    public AbstractSection<?> getSection(SectionType type) {
+        return sections.get(type);
     }
 
     @Override

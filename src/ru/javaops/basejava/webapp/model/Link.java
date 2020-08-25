@@ -15,10 +15,12 @@ public final class Link {
         this.url = url;
     }
 
+    @NotNull
     public String getText() {
         return text;
     }
 
+    @Nullable
     public String getUrl() {
         return url;
     }

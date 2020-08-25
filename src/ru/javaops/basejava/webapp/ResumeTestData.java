@@ -1,29 +1,51 @@
 package ru.javaops.basejava.webapp;
 
-import org.jetbrains.annotations.NotNull;
 import ru.javaops.basejava.webapp.model.ContactType;
 import ru.javaops.basejava.webapp.model.Experience;
 import ru.javaops.basejava.webapp.model.Link;
 import ru.javaops.basejava.webapp.model.ListSection;
+import ru.javaops.basejava.webapp.model.Organization;
 import ru.javaops.basejava.webapp.model.OrganizationSection;
 import ru.javaops.basejava.webapp.model.Resume;
 import ru.javaops.basejava.webapp.model.SectionType;
 import ru.javaops.basejava.webapp.model.TextSection;
+import ru.javaops.basejava.webapp.util.DateUtil;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public final class ResumeTestData {
     public static void main(String[] args) {
-        Resume resume = getTestResume();
-        System.out.println(resume);
+        Resume resume = getTestResume("TestUuid", "Григорий Кислин");
+
+        System.out.println("\n===GET CONTACTS===");
+        System.out.println(resume.getContacts());
+
+        System.out.println("\n===TEST SET SKYPE===");
+        resume.setContact(ContactType.SKYPE, new Link("No skype!", null));
+        System.out.println(ContactType.SKYPE.getTitle() + resume.getContact(ContactType.SKYPE));
+
+        System.out.println('\n' + SectionType.OBJECTIVE.getTitle().toUpperCase());
+        System.out.println(resume.getSection(SectionType.OBJECTIVE));
+        System.out.println('\n' + SectionType.PERSONAL.getTitle().toUpperCase());
+        System.out.println(resume.getSection(SectionType.PERSONAL));
+        System.out.println('\n' + SectionType.ACHIEVEMENT.getTitle().toUpperCase());
+        System.out.println(resume.getSection(SectionType.ACHIEVEMENT));
+        System.out.println('\n' + SectionType.QUALIFICATIONS.getTitle().toUpperCase());
+        System.out.println(resume.getSection(SectionType.QUALIFICATIONS));
+        System.out.println('\n' + SectionType.EXPERIENCE.getTitle().toUpperCase());
+        System.out.println(resume.getSection(SectionType.EXPERIENCE));
+        System.out.println('\n' + SectionType.EDUCATION.getTitle().toUpperCase());
+        System.out.println(resume.getSection(SectionType.EDUCATION));
     }
 
-    @NotNull
-    public static Resume getTestResume() {
-        Resume resume = new Resume("Григорий Кислин");
+    public static Resume getTestResume(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
 
         Map<ContactType, Link> contacts = resume.getContacts();
         contacts.put(ContactType.PHONE_NUMBER, new Link(
@@ -87,61 +109,90 @@ public final class ResumeTestData {
         qualifications.setContent(content);
 
         OrganizationSection experience = (OrganizationSection) resume.getSections().get(SectionType.EXPERIENCE);
-        List<Experience> timeContent = new ArrayList<>();
-        timeContent.add(new Experience(
-                new Link("Java Online Projects", "http://javaops.ru/"),
-                LocalDate.of(2013, 10, 1),
-                LocalDate.MAX,
-                "Автор проекта.\n" +
-                        "Создание, организация и проведение Java онлайн проектов и стажировок.")
+        List<Organization> organizationContent = new ArrayList<>();
+        organizationContent.add(new Organization(
+                        "Java Online Projects",
+                        "http://javaops.ru/",
+                        Collections.singletonList(new Experience(
+                                DateUtil.of(2013, Month.OCTOBER),
+                                LocalDate.MAX,
+                                "Автор проекта.",
+                                "Создание, организация и проведение Java онлайн проектов и стажировок.")
+                        )
+                )
         );
-        timeContent.add(new Experience(
-                new Link("Wrike", "https://www.wrike.com/"),
-                LocalDate.of(2014, 10, 1),
-                LocalDate.of(2016, 1, 1),
-                "Старший разработчик (backend)\n" +
-                        "Проектирование и разработка онлайн платформы управления проектами " +
-                        "Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, " +
-                        "Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.")
+        organizationContent.add(new Organization(
+                        "Wrike",
+                        "https://www.wrike.com/",
+                        Collections.singletonList(new Experience(
+                                DateUtil.of(2014, Month.OCTOBER),
+                                DateUtil.of(2016, Month.JANUARY),
+                                "Старший разработчик (backend)",
+                                "Проектирование и разработка онлайн платформы управления " +
+                                        "проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, " +
+                                        "PostgreSQL, Redis). Двухфакторная аутентификация, авторизация " +
+                                        "по OAuth1, OAuth2, JWT SSO.")
+                        )
+                )
         );
-        timeContent.add(new Experience(
-                new Link("RIT Center", null),
-                LocalDate.of(2012, 4, 1),
-                LocalDate.of(2014, 10, 1),
-                "Java архитектор\n" +
-                        "Организация процесса разработки системы ERP для разных окружений: релизная " +
-                        "политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация " +
-                        "Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура " +
-                        "БД и серверной части системы.")
+        organizationContent.add(new Organization(
+                        "RIT Center",
+                        null,
+                        Collections.singletonList(new Experience(
+                                DateUtil.of(2012, Month.APRIL),
+                                DateUtil.of(2014, Month.OCTOBER),
+                                "Java архитектор",
+                                "Организация процесса разработки системы ERP для разных окружений: " +
+                                        "релизная политика, версионирование, ведение CI (Jenkins), миграция " +
+                                        "базы (кастомизация Flyway), конфигурирование системы (pgBoucer, " +
+                                        "Nginx), AAA via SSO. Архитектура БД и серверной части системы.")
+                        )
+                )
         );
-        timeContent.add(new Experience(
-                new Link("Luxoft (Deutsche Bank)", "http://www.luxoft.ru/"),
-                LocalDate.of(2010, 12, 1),
-                LocalDate.of(2012, 4, 1),
-                "Ведущий программист\n" +
-                        "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, " +
-                        "SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. " +
-                        "Реализация RIA-приложения для администрирования, мониторинга и анализа результатов " +
-                        "в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), " +
-                        "Highstock, Commet, HTML5.")
-        );
-        experience.setContent(timeContent);
+        experience.setContent(organizationContent);
 
         OrganizationSection education = (OrganizationSection) resume.getSections().get(SectionType.EDUCATION);
-        timeContent = new ArrayList<>();
-        timeContent.add(new Experience(
-                new Link("Coursera", "https://www.coursera.org/course/progfun"),
-                LocalDate.of(2013, 3, 1),
-                LocalDate.of(2013, 5, 1),
-                "\"Functional Programming Principles in Scala\" by Martin Odersky")
+        organizationContent = new ArrayList<>();
+        organizationContent.add(new Organization(
+                        "Coursera",
+                        "https://www.coursera.org/course/progfun",
+                        Collections.singletonList(new Experience(
+                                DateUtil.of(2013, Month.MARCH),
+                                DateUtil.of(2013, Month.MAY),
+                                "\"Functional Programming Principles in Scala\" by Martin Odersky",
+                                null)
+                        )
+                )
         );
-        timeContent.add(new Experience(
-                new Link("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"),
-                LocalDate.of(2011, 3, 1),
-                LocalDate.of(2011, 4, 1),
-                "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"")
+        organizationContent.add(new Organization(
+                        "Siemens AG",
+                        "http://www.siemens.ru/",
+                        Collections.singletonList(new Experience(
+                                DateUtil.of(2005, Month.JANUARY),
+                                DateUtil.of(2005, Month.APRIL),
+                                "3 месяца обучения мобильным IN сетям (Берлин)",
+                                null)
+                        )
+                )
         );
-        education.setContent(timeContent);
+        organizationContent.add(new Organization(
+                        "Санкт-Петербургский национальный исследовательский университет " +
+                                "информационных технологий, механики и оптики",
+                        "http://www.ifmo.ru/",
+                        Arrays.asList(new Experience(
+                                        DateUtil.of(1993, Month.SEPTEMBER),
+                                        DateUtil.of(1996, Month.JULY),
+                                        "Аспирантура (программист С, С++)",
+                                        null),
+                                new Experience(
+                                        DateUtil.of(1987, Month.SEPTEMBER),
+                                        DateUtil.of(1993, Month.JULY),
+                                        "Инженер (программист Fortran, C)",
+                                        null)
+                        )
+                )
+        );
+        education.setContent(organizationContent);
         return resume;
     }
 }

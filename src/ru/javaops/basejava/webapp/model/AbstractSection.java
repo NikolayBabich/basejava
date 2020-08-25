@@ -10,7 +10,7 @@ public abstract class AbstractSection<T> {
         return content;
     }
 
-    public final void setContent(T content) {
+    public final void setContent(@Nullable T content) {
         this.content = content;
     }
 

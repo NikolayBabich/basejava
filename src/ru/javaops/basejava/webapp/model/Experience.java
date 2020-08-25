@@ -1,43 +1,46 @@
 package ru.javaops.basejava.webapp.model;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
 public final class Experience {
-    private final Link link;
     private final LocalDate startDate;
     private final LocalDate finishDate;
-    private final String text;
+    private final String title;
+    private final String description;
 
-    public Experience(@NotNull Link link,
-                      @NotNull LocalDate startDate, @NotNull LocalDate finishDate,
-                      @NotNull String text) {
-        Objects.requireNonNull(link, "link must not be null");
+    public Experience(@NotNull LocalDate startDate, @NotNull LocalDate finishDate,
+                      @NotNull String title, @Nullable String description) {
         Objects.requireNonNull(startDate, "startDate must not be null");
         Objects.requireNonNull(finishDate, "finishDate must not be null");
-        Objects.requireNonNull(text, "text must not be null");
-        this.link = link;
+        Objects.requireNonNull(title, "title must not be null");
         this.startDate = startDate;
         this.finishDate = finishDate;
-        this.text = text;
+        this.title = title;
+        this.description = description;
     }
 
-    public Link getLink() {
-        return link;
-    }
-
+    @NotNull
     public LocalDate getStartDate() {
         return startDate;
     }
 
+    @NotNull
     public LocalDate getFinishDate() {
         return finishDate;
     }
 
-    public String getText() {
-        return text;
+    @NotNull
+    public String getTitle() {
+        return title;
+    }
+    
+    @Nullable
+    public String getDescription() {
+        return description;
     }
 
     @Override
@@ -47,28 +50,30 @@ public final class Experience {
 
         Experience that = (Experience) o;
 
-        if (!link.equals(that.link)) return false;
         if (!startDate.equals(that.startDate)) return false;
         if (!finishDate.equals(that.finishDate)) return false;
-        return text.equals(that.text);
+        if (!title.equals(that.title)) return false;
+        return description != null ? description.equals(that.description) : that.description == null;
     }
 
     @Override
     public int hashCode() {
-        int result = link.hashCode();
-        result = 31 * result + startDate.hashCode();
+        int result = startDate.hashCode();
         result = 31 * result + finishDate.hashCode();
-        result = 31 * result + text.hashCode();
+        result = 31 * result + title.hashCode();
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        String finishDateText = (finishDate.isAfter(LocalDate.now())) ? "Сейчас"
-                : "" + finishDate.getMonthValue() + '\\' + finishDate.getYear();
-        return "\n\n" + link + '\n' +
-                startDate.getMonthValue() + '\\' + startDate.getYear() +
-                " - " + finishDateText + "\t\t" +
-                text;
+        String startDateText = String.format("%02d\\%04d", startDate.getMonthValue(), startDate.getYear());
+        String finishDateText = (finishDate.isAfter(LocalDate.now()))
+                ? "Сейчас"
+                : String.format("%02d\\%04d", finishDate.getMonthValue(), finishDate.getYear());
+        String descriptionText = (description == null) ? "" : description;
+
+        return startDateText + " - " + finishDateText + "\t\t" +
+                title + '\n' + descriptionText;
     }
 }
