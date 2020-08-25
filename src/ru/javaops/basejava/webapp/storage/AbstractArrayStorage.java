@@ -39,15 +39,15 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
             throw new StorageException("Resume storage limit size has been reached",
                     resume.getUuid());
         }
-        insert(index, resume);
+        doInsert(index, resume);
         size++;
     }
 
     /**
-     * @param index  specify position in array to insert
+     * @param index  specify position in array to doInsert
      * @param resume Resume to be inserted to this storage
      */
-    protected abstract void insert(int index, Resume resume);
+    protected abstract void doInsert(int index, Resume resume);
 
     @Override
     protected final void updateImpl(Integer index, Resume resume) {
@@ -56,15 +56,15 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
     @Override
     protected final void deleteImpl(Integer index) {
-        remove(index);
+        doRemove(index);
         storage[size - 1] = null;
         size--;
     }
 
     /**
-     * @param index specify position in array to remove Resume
+     * @param index specify position in array to doRemove Resume
      */
-    protected abstract void remove(int index);
+    protected abstract void doRemove(int index);
 
     @Override
     protected final Resume getImpl(Integer index) {

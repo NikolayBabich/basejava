@@ -8,12 +8,12 @@ import ru.javaops.basejava.webapp.model.Resume;
 public final class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void insert(int index, Resume resume) {
+    protected void doInsert(int index, Resume resume) {
         storage[size] = resume;
     }
 
     @Override
-    protected void remove(int index) {
+    protected void doRemove(int index) {
         storage[index] = storage[size - 1];
     }
 
