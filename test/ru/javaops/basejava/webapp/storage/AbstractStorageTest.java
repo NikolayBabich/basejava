@@ -2,6 +2,7 @@ package ru.javaops.basejava.webapp.storage;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.javaops.basejava.webapp.ResumeTestData;
 import ru.javaops.basejava.webapp.exception.ExistStorageException;
 import ru.javaops.basejava.webapp.exception.NotExistStorageException;
 import ru.javaops.basejava.webapp.model.Resume;
@@ -21,6 +22,7 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_2 = new Resume(UUID_2, "Amy Kroker");
     private static final Resume RESUME_3 = new Resume("Zapp Brannigan");
     private static final Resume RESUME_4 = new Resume(UUID_2, "Turanga Leela");
+    private static final Resume RESUME_5 = ResumeTestData.getTestResume();
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;

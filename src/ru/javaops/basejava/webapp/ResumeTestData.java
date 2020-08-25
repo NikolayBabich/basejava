@@ -1,5 +1,6 @@
 package ru.javaops.basejava.webapp;
 
+import org.jetbrains.annotations.NotNull;
 import ru.javaops.basejava.webapp.model.ContactType;
 import ru.javaops.basejava.webapp.model.Experience;
 import ru.javaops.basejava.webapp.model.Link;
@@ -16,6 +17,12 @@ import java.util.Map;
 
 public final class ResumeTestData {
     public static void main(String[] args) {
+        Resume resume = getTestResume();
+        System.out.println(resume);
+    }
+
+    @NotNull
+    public static Resume getTestResume() {
         Resume resume = new Resume("Григорий Кислин");
 
         Map<ContactType, Link> contacts = resume.getContacts();
@@ -135,7 +142,6 @@ public final class ResumeTestData {
                 "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"")
         );
         education.setContent(timeContent);
-
-        System.out.println(resume);
+        return resume;
     }
 }

@@ -2,7 +2,7 @@ package ru.javaops.basejava.webapp.model;
 
 import org.jetbrains.annotations.Nullable;
 
-public abstract class Section<T> {
+public abstract class AbstractSection<T> {
     protected T content;
 
     @Nullable
@@ -17,9 +17,9 @@ public abstract class Section<T> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Section)) return false;
+        if (!(o instanceof AbstractSection)) return false;
 
-        Section<?> that = (Section<?>) o;
+        AbstractSection<?> that = (AbstractSection<?>) o;
 
         return content != null ? content.equals(that.content) : that.content == null;
     }
@@ -31,6 +31,6 @@ public abstract class Section<T> {
 
     @Override
     public String toString() {
-        return content.toString();
+        return (content == null) ? "" : content.toString();
     }
 }
