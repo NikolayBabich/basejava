@@ -1,7 +1,5 @@
 package ru.javaops.basejava.webapp.model;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
@@ -20,11 +18,11 @@ public final class Resume implements Comparable<Resume> {
         this.sections = Collections.unmodifiableMap(tempSections);
     }
 
-    public Resume(@NotNull String fullName) {
+    public Resume(String fullName) {
         this(UUID.randomUUID().toString().substring(0, 8), fullName);
     }
 
-    public Resume(@NotNull String uuid, @NotNull String fullName) {
+    public Resume(String uuid, String fullName) {
         Objects.requireNonNull(uuid, "uuid must not be null");
         Objects.requireNonNull(fullName, "fullName must not be null");
         this.uuid = uuid;
@@ -40,36 +38,30 @@ public final class Resume implements Comparable<Resume> {
         sections.put(SectionType.EDUCATION, new OrganizationSection());
     }
 
-    @NotNull
     public String getUuid() {
         return uuid;
     }
 
-    @NotNull
     public String getFullName() {
         return fullName;
     }
 
-    @NotNull
     public Map<ContactType, Link> getContacts() {
         return contacts;
     }
 
-    @NotNull
     public Map<SectionType, AbstractSection<?>> getSections() {
         return sections;
     }
 
-    @NotNull
     public Link getContact(ContactType type) {
         return contacts.get(type);
     }
 
-    public void setContact(ContactType type, @NotNull Link contact) {
+    public void setContact(ContactType type, Link contact) {
         contacts.put(type, contact);
     }
 
-    @NotNull
     public AbstractSection<?> getSection(SectionType type) {
         return sections.get(type);
     }
@@ -105,7 +97,7 @@ public final class Resume implements Comparable<Resume> {
     }
 
     @Override
-    public int compareTo(@NotNull Resume o) {
+    public int compareTo(Resume o) {
         return uuid.compareTo(o.getUuid());
     }
 }

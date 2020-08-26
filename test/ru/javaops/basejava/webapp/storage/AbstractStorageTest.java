@@ -2,7 +2,6 @@ package ru.javaops.basejava.webapp.storage;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.javaops.basejava.webapp.ResumeTestData;
 import ru.javaops.basejava.webapp.exception.ExistStorageException;
 import ru.javaops.basejava.webapp.exception.NotExistStorageException;
 import ru.javaops.basejava.webapp.model.Resume;
@@ -11,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static ru.javaops.basejava.webapp.ResumeTestData.getTestResume;
 
 public abstract class AbstractStorageTest {
     protected final Storage storage;
@@ -18,10 +18,10 @@ public abstract class AbstractStorageTest {
     private static final String UUID_1 = "uuidZ";
     private static final String UUID_2 = "uuidA";
 
-    private static final Resume RESUME_1 = ResumeTestData.getTestResume(UUID_1, "Zapp Brannigan");
-    private static final Resume RESUME_2 = ResumeTestData.getTestResume(UUID_2, "Amy Kroker");
-    private static final Resume RESUME_3 = new Resume("Zapp Brannigan");
-    private static final Resume RESUME_4 = ResumeTestData.getTestResume(UUID_2, "Turanga Leela");
+    private static final Resume RESUME_1 = getTestResume(UUID_1, "Zapp Brannigan");
+    private static final Resume RESUME_2 = getTestResume(UUID_2, "Amy Kroker");
+    private static final Resume RESUME_3 = getTestResume("Zapp Brannigan");
+    private static final Resume RESUME_4 = getTestResume(UUID_2, "Turanga Leela");
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -43,7 +43,7 @@ public abstract class AbstractStorageTest {
     @Test
     public void save() {
         int size = storage.size();
-        Resume newResume = new Resume("Turanga Leela");
+        Resume newResume = getTestResume("Turanga Leela");
         storage.save(newResume);
         assertSize(size + 1);
         assertGet(newResume);
@@ -62,7 +62,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void updateNotExist() {
-        storage.update(new Resume("dummy"));
+        storage.update(getTestResume("dummy"));
     }
 
     @Test(expected = NotExistStorageException.class)

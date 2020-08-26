@@ -1,16 +1,13 @@
 package ru.javaops.basejava.webapp.model;
 
-import org.jetbrains.annotations.Nullable;
-
 public abstract class AbstractSection<T> {
-    protected T content;
+    T content;
 
-    @Nullable
     public final T getContent() {
         return content;
     }
 
-    public final void setContent(@Nullable T content) {
+    public final void setContent(T content) {
         this.content = content;
     }
 

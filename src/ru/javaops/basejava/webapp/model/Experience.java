@@ -1,8 +1,5 @@
 package ru.javaops.basejava.webapp.model;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -12,8 +9,8 @@ public final class Experience {
     private final String title;
     private final String description;
 
-    public Experience(@NotNull LocalDate startDate, @NotNull LocalDate finishDate,
-                      @NotNull String title, @Nullable String description) {
+    public Experience(LocalDate startDate, LocalDate finishDate,
+                      String title, String description) {
         Objects.requireNonNull(startDate, "startDate must not be null");
         Objects.requireNonNull(finishDate, "finishDate must not be null");
         Objects.requireNonNull(title, "title must not be null");
@@ -23,22 +20,18 @@ public final class Experience {
         this.description = description;
     }
 
-    @NotNull
     public LocalDate getStartDate() {
         return startDate;
     }
 
-    @NotNull
     public LocalDate getFinishDate() {
         return finishDate;
     }
 
-    @NotNull
     public String getTitle() {
         return title;
     }
-    
-    @Nullable
+
     public String getDescription() {
         return description;
     }
@@ -53,7 +46,9 @@ public final class Experience {
         if (!startDate.equals(that.startDate)) return false;
         if (!finishDate.equals(that.finishDate)) return false;
         if (!title.equals(that.title)) return false;
-        return description != null ? description.equals(that.description) : that.description == null;
+        return description != null
+                ? description.equals(that.description)
+                : that.description == null;
     }
 
     @Override
@@ -67,7 +62,8 @@ public final class Experience {
 
     @Override
     public String toString() {
-        String startDateText = String.format("%02d\\%04d", startDate.getMonthValue(), startDate.getYear());
+        String startDateText =
+                String.format("%02d\\%04d", startDate.getMonthValue(), startDate.getYear());
         String finishDateText = (finishDate.isAfter(LocalDate.now()))
                 ? "Сейчас"
                 : String.format("%02d\\%04d", finishDate.getMonthValue(), finishDate.getYear());

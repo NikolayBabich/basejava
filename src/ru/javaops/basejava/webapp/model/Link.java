@@ -1,6 +1,5 @@
 package ru.javaops.basejava.webapp.model;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -9,18 +8,16 @@ public final class Link {
     private final String text;
     private final String url;
 
-    public Link(@NotNull String textLink, @Nullable String url) {
+    public Link(String textLink, @Nullable String url) {
         Objects.requireNonNull(textLink, "textLink must not be null");
         this.text = textLink;
         this.url = url;
     }
 
-    @NotNull
     public String getText() {
         return text;
     }
 
-    @Nullable
     public String getUrl() {
         return url;
     }

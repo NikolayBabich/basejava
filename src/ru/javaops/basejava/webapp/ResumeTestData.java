@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public final class ResumeTestData {
     public static void main(String[] args) {
@@ -42,6 +43,10 @@ public final class ResumeTestData {
         System.out.println(resume.getSection(SectionType.EXPERIENCE));
         System.out.println('\n' + SectionType.EDUCATION.getTitle().toUpperCase());
         System.out.println(resume.getSection(SectionType.EDUCATION));
+    }
+
+    public static Resume getTestResume(String fullName) {
+        return getTestResume(UUID.randomUUID().toString().substring(0, 8), fullName);
     }
 
     public static Resume getTestResume(String uuid, String fullName) {
@@ -99,7 +104,8 @@ public final class ResumeTestData {
                 "авторизации различных ERP модулей, интеграция CIFS/SMB java сервера");
         achievement.setContent(content);
 
-        ListSection qualifications = (ListSection) resume.getSections().get(SectionType.QUALIFICATIONS);
+        ListSection qualifications =
+                (ListSection) resume.getSections().get(SectionType.QUALIFICATIONS);
         content = new ArrayList<>();
         content.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
         content.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
@@ -108,7 +114,8 @@ public final class ResumeTestData {
         content.add("JavaScript: jQuery, ExtJS, Bootstrap.js, underscore.js");
         qualifications.setContent(content);
 
-        OrganizationSection experience = (OrganizationSection) resume.getSections().get(SectionType.EXPERIENCE);
+        OrganizationSection experience =
+                (OrganizationSection) resume.getSections().get(SectionType.EXPERIENCE);
         List<Organization> organizationContent = new ArrayList<>();
         organizationContent.add(new Organization(
                         "Java Online Projects",
@@ -117,7 +124,8 @@ public final class ResumeTestData {
                                 DateUtil.of(2013, Month.OCTOBER),
                                 LocalDate.MAX,
                                 "Автор проекта.",
-                                "Создание, организация и проведение Java онлайн проектов и стажировок.")
+                                "Создание, организация и проведение Java онлайн " +
+                                        "проектов и стажировок.")
                         )
                 )
         );
@@ -128,9 +136,10 @@ public final class ResumeTestData {
                                 DateUtil.of(2014, Month.OCTOBER),
                                 DateUtil.of(2016, Month.JANUARY),
                                 "Старший разработчик (backend)",
-                                "Проектирование и разработка онлайн платформы управления " +
-                                        "проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, " +
-                                        "PostgreSQL, Redis). Двухфакторная аутентификация, авторизация " +
+                                "Проектирование и разработка онлайн платформы " +
+                                        "управления проектами Wrike (Java 8 API, Maven, Spring, " +
+                                        "MyBatis, Guava, Vaadin, PostgreSQL, Redis). " +
+                                        "Двухфакторная аутентификация, авторизация " +
                                         "по OAuth1, OAuth2, JWT SSO.")
                         )
                 )
@@ -142,16 +151,18 @@ public final class ResumeTestData {
                                 DateUtil.of(2012, Month.APRIL),
                                 DateUtil.of(2014, Month.OCTOBER),
                                 "Java архитектор",
-                                "Организация процесса разработки системы ERP для разных окружений: " +
-                                        "релизная политика, версионирование, ведение CI (Jenkins), миграция " +
-                                        "базы (кастомизация Flyway), конфигурирование системы (pgBoucer, " +
-                                        "Nginx), AAA via SSO. Архитектура БД и серверной части системы.")
+                                "Организация процесса разработки системы ERP для " +
+                                        "разных окружений: релизная политика, версионирование, " +
+                                        "ведение CI (Jenkins), миграция базы (кастомизация " +
+                                        "Flyway), конфигурирование системы (pgBoucer, Nginx), " +
+                                        "AAA via SSO. Архитектура БД и серверной части системы.")
                         )
                 )
         );
         experience.setContent(organizationContent);
 
-        OrganizationSection education = (OrganizationSection) resume.getSections().get(SectionType.EDUCATION);
+        OrganizationSection education =
+                (OrganizationSection) resume.getSections().get(SectionType.EDUCATION);
         organizationContent = new ArrayList<>();
         organizationContent.add(new Organization(
                         "Coursera",
@@ -159,7 +170,8 @@ public final class ResumeTestData {
                         Collections.singletonList(new Experience(
                                 DateUtil.of(2013, Month.MARCH),
                                 DateUtil.of(2013, Month.MAY),
-                                "\"Functional Programming Principles in Scala\" by Martin Odersky",
+                                "\"Functional Programming Principles " +
+                                        "in Scala\" by Martin Odersky",
                                 null)
                         )
                 )
