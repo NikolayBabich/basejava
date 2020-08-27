@@ -1,6 +1,8 @@
 package ru.javaops.basejava.webapp.model;
 
-public abstract class AbstractSection<T> {
+import java.io.Serializable;
+
+public abstract class AbstractSection<T> implements Serializable {
     T content;
 
     public final T getContent() {

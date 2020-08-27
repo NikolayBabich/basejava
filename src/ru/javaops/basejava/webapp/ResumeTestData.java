@@ -1,7 +1,6 @@
 package ru.javaops.basejava.webapp;
 
 import ru.javaops.basejava.webapp.model.ContactType;
-import ru.javaops.basejava.webapp.model.Experience;
 import ru.javaops.basejava.webapp.model.Link;
 import ru.javaops.basejava.webapp.model.ListSection;
 import ru.javaops.basejava.webapp.model.Organization;
@@ -120,7 +119,7 @@ public final class ResumeTestData {
         organizationContent.add(new Organization(
                         "Java Online Projects",
                         "http://javaops.ru/",
-                        Collections.singletonList(new Experience(
+                        Collections.singletonList(new Organization.Experience(
                                 DateUtil.of(2013, Month.OCTOBER),
                                 LocalDate.MAX,
                                 "Автор проекта.",
@@ -132,7 +131,7 @@ public final class ResumeTestData {
         organizationContent.add(new Organization(
                         "Wrike",
                         "https://www.wrike.com/",
-                        Collections.singletonList(new Experience(
+                        Collections.singletonList(new Organization.Experience(
                                 DateUtil.of(2014, Month.OCTOBER),
                                 DateUtil.of(2016, Month.JANUARY),
                                 "Старший разработчик (backend)",
@@ -147,7 +146,7 @@ public final class ResumeTestData {
         organizationContent.add(new Organization(
                         "RIT Center",
                         null,
-                        Collections.singletonList(new Experience(
+                        Collections.singletonList(new Organization.Experience(
                                 DateUtil.of(2012, Month.APRIL),
                                 DateUtil.of(2014, Month.OCTOBER),
                                 "Java архитектор",
@@ -167,7 +166,7 @@ public final class ResumeTestData {
         organizationContent.add(new Organization(
                         "Coursera",
                         "https://www.coursera.org/course/progfun",
-                        Collections.singletonList(new Experience(
+                        Collections.singletonList(new Organization.Experience(
                                 DateUtil.of(2013, Month.MARCH),
                                 DateUtil.of(2013, Month.MAY),
                                 "\"Functional Programming Principles " +
@@ -179,7 +178,7 @@ public final class ResumeTestData {
         organizationContent.add(new Organization(
                         "Siemens AG",
                         "http://www.siemens.ru/",
-                        Collections.singletonList(new Experience(
+                        Collections.singletonList(new Organization.Experience(
                                 DateUtil.of(2005, Month.JANUARY),
                                 DateUtil.of(2005, Month.APRIL),
                                 "3 месяца обучения мобильным IN сетям (Берлин)",
@@ -191,12 +190,12 @@ public final class ResumeTestData {
                         "Санкт-Петербургский национальный исследовательский университет " +
                                 "информационных технологий, механики и оптики",
                         "http://www.ifmo.ru/",
-                        Arrays.asList(new Experience(
+                        Arrays.asList(new Organization.Experience(
                                         DateUtil.of(1993, Month.SEPTEMBER),
                                         DateUtil.of(1996, Month.JULY),
                                         "Аспирантура (программист С, С++)",
                                         null),
-                                new Experience(
+                                new Organization.Experience(
                                         DateUtil.of(1987, Month.SEPTEMBER),
                                         DateUtil.of(1993, Month.JULY),
                                         "Инженер (программист Fortran, C)",

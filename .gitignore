@@ -2,4 +2,5 @@
 lib
 out
 log
+res
 *.iml

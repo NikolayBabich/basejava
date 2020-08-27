@@ -1,12 +1,13 @@
 package ru.javaops.basejava.webapp.model;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-public final class Resume implements Comparable<Resume> {
+public final class Resume implements Comparable<Resume>, Serializable {
     private final String uuid;
     private final String fullName;
     private final Map<ContactType, Link> contacts = new EnumMap<>(ContactType.class);

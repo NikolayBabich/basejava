@@ -1,14 +1,13 @@
 package ru.javaops.basejava.webapp.model;
 
-import org.jetbrains.annotations.Nullable;
-
+import java.io.Serializable;
 import java.util.Objects;
 
-public final class Link {
+public final class Link implements Serializable {
     private final String text;
     private final String url;
 
-    public Link(String textLink, @Nullable String url) {
+    public Link(String textLink, String url) {
         Objects.requireNonNull(textLink, "textLink must not be null");
         this.text = textLink;
         this.url = url;
