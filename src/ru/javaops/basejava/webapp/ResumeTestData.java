@@ -16,19 +16,31 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public final class ResumeTestData {
+    private ResumeTestData() {
+    }
+
     public static void main(String[] args) {
-        Resume resume = getTestResume("TestUuid", "Григорий Кислин");
+        Resume resume = getTestResume("Григорий Кислин");
 
-        System.out.println("\n===GET CONTACTS===");
-        System.out.println(resume.getContacts());
+        System.out.printf("#%s: %s%n", resume.getUuid(), resume.getFullName());
 
-        System.out.println("\n===TEST SET SKYPE===");
-        resume.setContact(ContactType.SKYPE, new Link("No skype!", null));
-        System.out.println(ContactType.SKYPE.getTitle() + resume.getContact(ContactType.SKYPE));
+        System.out.println(ContactType.PHONE_NUMBER.getTitle() +
+                resume.getContact(ContactType.PHONE_NUMBER));
+        System.out.println(ContactType.SKYPE.getTitle() +
+                resume.getContact(ContactType.SKYPE));
+        System.out.println(ContactType.EMAIL.getTitle() +
+                resume.getContact(ContactType.EMAIL));
+        System.out.println(ContactType.LINKEDIN.getTitle() +
+                resume.getContact(ContactType.LINKEDIN));
+        System.out.println(ContactType.GITHUB.getTitle() +
+                resume.getContact(ContactType.GITHUB));
+        System.out.println(ContactType.STACKOVERFLOW.getTitle() +
+                resume.getContact(ContactType.STACKOVERFLOW));
+        System.out.println(ContactType.HOME_PAGE.getTitle() +
+                resume.getContact(ContactType.HOME_PAGE));
 
         System.out.println('\n' + SectionType.OBJECTIVE.getTitle().toUpperCase());
         System.out.println(resume.getSection(SectionType.OBJECTIVE));
@@ -51,72 +63,69 @@ public final class ResumeTestData {
     public static Resume getTestResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-        Map<ContactType, Link> contacts = resume.getContacts();
-        contacts.put(ContactType.PHONE_NUMBER, new Link(
+        resume.setContact(ContactType.PHONE_NUMBER, new Link(
                 "+7(921) 855-0482",
                 null)
         );
-        contacts.put(ContactType.SKYPE, new Link(
+        resume.setContact(ContactType.SKYPE, new Link(
                 "grigory.kislin",
                 "skype:grigory.kislin")
         );
-        contacts.put(ContactType.EMAIL, new Link(
+        resume.setContact(ContactType.EMAIL, new Link(
                 "gkislin@yandex.ru",
                 "mailto:gkislin@yandex.ru"));
-        contacts.put(ContactType.LINKEDIN, new Link(
+        resume.setContact(ContactType.LINKEDIN, new Link(
                 "Профиль LinkedIn",
                 "https://www.linkedin.com/in/gkislin")
         );
-        contacts.put(ContactType.GITHUB, new Link(
+        resume.setContact(ContactType.GITHUB, new Link(
                 "Профиль GitHub",
                 "https://github.com/gkislin")
         );
-        contacts.put(ContactType.STACKOVERFLOW, new Link(
+        resume.setContact(ContactType.STACKOVERFLOW, new Link(
                 "Профиль Stackoverflow",
                 "https://stackoverflow.com/users/548473")
         );
-        contacts.put(ContactType.HOME_PAGE, new Link(
+        resume.setContact(ContactType.HOME_PAGE, new Link(
                 "Домашняя страница",
                 "http://gkislin.ru/")
         );
 
-        TextSection objective = (TextSection) resume.getSections().get(SectionType.OBJECTIVE);
-        objective.setContent("Ведущий стажировок и корпоративного обучения " +
-                "по Java Web и Enterprise технологиям");
 
-        TextSection personal = (TextSection) resume.getSections().get(SectionType.PERSONAL);
-        personal.setContent("Аналитический склад ума, сильная логика, креативность, " +
-                "инициативность. Пурист кода и архитектуры.");
+        resume.setSection(SectionType.OBJECTIVE,
+                new TextSection("Ведущий стажировок и корпоративного обучения по Java " +
+                        "Web и Enterprise технологиям")
+        );
 
-        ListSection achievement = (ListSection) resume.getSections().get(SectionType.ACHIEVEMENT);
-        List<String> content = new ArrayList<>();
-        content.add("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java " +
+        resume.setSection(SectionType.PERSONAL,
+                new TextSection("Аналитический склад ума, сильная логика, креативность, " +
+                        "инициативность. Пурист кода и архитектуры.")
+        );
+
+        List<String> achievs = new ArrayList<>();
+        achievs.add("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java " +
                 "Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб " +
                 "сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". Организация " +
                 "онлайн стажировок и ведение проектов. Более 1000 выпускников.");
-        content.add("Реализация двухфакторной аутентификации для онлайн платформы управления " +
+        achievs.add("Реализация двухфакторной аутентификации для онлайн платформы управления " +
                 "проектами Wrike. Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, " +
                 "Zendesk.");
-        content.add("Налаживание процесса разработки и непрерывной интеграции ERP системы River " +
+        achievs.add("Налаживание процесса разработки и непрерывной интеграции ERP системы River " +
                 "BPM. Интеграция с 1С, Bonita BPM, CMIS, LDAP. Разработка приложения управления " +
                 "окружением на стеке: Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и " +
                 "авторизации различных ERP модулей, интеграция CIFS/SMB java сервера");
-        achievement.setContent(content);
+        resume.setSection(SectionType.ACHIEVEMENT, new ListSection(achievs));
 
-        ListSection qualifications =
-                (ListSection) resume.getSections().get(SectionType.QUALIFICATIONS);
-        content = new ArrayList<>();
-        content.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
-        content.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
-        content.add("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle");
-        content.add("Languages: Java, Scala, Python/Jython/PL-Python, JavaScript, Groovy");
-        content.add("JavaScript: jQuery, ExtJS, Bootstrap.js, underscore.js");
-        qualifications.setContent(content);
+        List<String> quals = new ArrayList<>();
+        quals.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
+        quals.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
+        quals.add("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle");
+        quals.add("Languages: Java, Scala, Python/Jython/PL-Python, JavaScript, Groovy");
+        quals.add("JavaScript: jQuery, ExtJS, Bootstrap.js, underscore.js");
+        resume.setSection(SectionType.QUALIFICATIONS, new ListSection(quals));
 
-        OrganizationSection experience =
-                (OrganizationSection) resume.getSections().get(SectionType.EXPERIENCE);
-        List<Organization> organizationContent = new ArrayList<>();
-        organizationContent.add(new Organization(
+        List<Organization> expOrganizations = new ArrayList<>();
+        expOrganizations.add(new Organization(
                         "Java Online Projects",
                         "http://javaops.ru/",
                         Collections.singletonList(new Organization.Experience(
@@ -128,7 +137,7 @@ public final class ResumeTestData {
                         )
                 )
         );
-        organizationContent.add(new Organization(
+        expOrganizations.add(new Organization(
                         "Wrike",
                         "https://www.wrike.com/",
                         Collections.singletonList(new Organization.Experience(
@@ -143,7 +152,7 @@ public final class ResumeTestData {
                         )
                 )
         );
-        organizationContent.add(new Organization(
+        expOrganizations.add(new Organization(
                         "RIT Center",
                         null,
                         Collections.singletonList(new Organization.Experience(
@@ -158,12 +167,10 @@ public final class ResumeTestData {
                         )
                 )
         );
-        experience.setContent(organizationContent);
+        resume.setSection(SectionType.EXPERIENCE, new OrganizationSection(expOrganizations));
 
-        OrganizationSection education =
-                (OrganizationSection) resume.getSections().get(SectionType.EDUCATION);
-        organizationContent = new ArrayList<>();
-        organizationContent.add(new Organization(
+        List<Organization> eduOrganizations = new ArrayList<>();
+        eduOrganizations.add(new Organization(
                         "Coursera",
                         "https://www.coursera.org/course/progfun",
                         Collections.singletonList(new Organization.Experience(
@@ -175,7 +182,7 @@ public final class ResumeTestData {
                         )
                 )
         );
-        organizationContent.add(new Organization(
+        eduOrganizations.add(new Organization(
                         "Siemens AG",
                         "http://www.siemens.ru/",
                         Collections.singletonList(new Organization.Experience(
@@ -186,7 +193,7 @@ public final class ResumeTestData {
                         )
                 )
         );
-        organizationContent.add(new Organization(
+        eduOrganizations.add(new Organization(
                         "Санкт-Петербургский национальный исследовательский университет " +
                                 "информационных технологий, механики и оптики",
                         "http://www.ifmo.ru/",
@@ -203,7 +210,8 @@ public final class ResumeTestData {
                         )
                 )
         );
-        education.setContent(organizationContent);
+        resume.setSection(SectionType.EDUCATION, new OrganizationSection(eduOrganizations));
+
         return resume;
     }
 }

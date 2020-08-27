@@ -1,23 +1,18 @@
 package ru.javaops.basejava.webapp.model;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
 public final class Resume implements Comparable<Resume>, Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final String uuid;
     private final String fullName;
     private final Map<ContactType, Link> contacts = new EnumMap<>(ContactType.class);
-    private final Map<SectionType, AbstractSection<?>> sections;
-
-    {
-        Map<SectionType, AbstractSection<?>> tempSections = new EnumMap<>(SectionType.class);
-        initializeSections(tempSections);
-        this.sections = Collections.unmodifiableMap(tempSections);
-    }
+    private final Map<SectionType, AbstractSection<?>> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString().substring(0, 8), fullName);
@@ -30,29 +25,12 @@ public final class Resume implements Comparable<Resume>, Serializable {
         this.fullName = fullName;
     }
 
-    private void initializeSections(Map<SectionType, AbstractSection<?>> sections) {
-        sections.put(SectionType.OBJECTIVE, new TextSection());
-        sections.put(SectionType.PERSONAL, new TextSection());
-        sections.put(SectionType.ACHIEVEMENT, new ListSection());
-        sections.put(SectionType.QUALIFICATIONS, new ListSection());
-        sections.put(SectionType.EXPERIENCE, new OrganizationSection());
-        sections.put(SectionType.EDUCATION, new OrganizationSection());
-    }
-
     public String getUuid() {
         return uuid;
     }
 
     public String getFullName() {
         return fullName;
-    }
-
-    public Map<ContactType, Link> getContacts() {
-        return contacts;
-    }
-
-    public Map<SectionType, AbstractSection<?>> getSections() {
-        return sections;
     }
 
     public Link getContact(ContactType type) {
@@ -65,6 +43,10 @@ public final class Resume implements Comparable<Resume>, Serializable {
 
     public AbstractSection<?> getSection(SectionType type) {
         return sections.get(type);
+    }
+
+    public void setSection(SectionType type, AbstractSection<?> section) {
+        sections.put(type, section);
     }
 
     @Override
@@ -99,6 +81,6 @@ public final class Resume implements Comparable<Resume>, Serializable {
 
     @Override
     public int compareTo(Resume o) {
-        return uuid.compareTo(o.getUuid());
+        return uuid.compareTo(o.uuid);
     }
 }

@@ -3,7 +3,10 @@ package ru.javaops.basejava.webapp;
 import java.io.File;
 import java.util.Objects;
 
-public class MainFile {
+final class MainFile {
+    private MainFile() {
+    }
+
     public static void main(String[] args) {
         File directory = new File("./");
         walkAllFilesInDirectory(directory, 0);
@@ -14,10 +17,10 @@ public class MainFile {
             if (!fileEntry.isHidden()) {
                 String indent = "-".repeat(indentCount);
                 if (fileEntry.isDirectory()) {
-                    System.out.println(indent + "Directory: " + fileEntry.getName());
+                    System.out.printf("%sDirectory: %s%n", indent, fileEntry.getName());
                     walkAllFilesInDirectory(fileEntry, indentCount + 3);
                 } else {
-                    System.out.println(indent + "File: " + fileEntry.getName());
+                    System.out.printf("%sFile: %s%n", indent, fileEntry.getName());
                 }
             }
         }

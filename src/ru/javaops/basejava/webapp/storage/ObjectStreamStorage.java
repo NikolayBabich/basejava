@@ -6,25 +6,27 @@ import ru.javaops.basejava.webapp.model.Resume;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 public class ObjectStreamStorage extends AbstractFileStorage {
-    protected ObjectStreamStorage(File directory) {
+    ObjectStreamStorage(File directory) {
         super(directory);
     }
 
     @Override
-    protected void doWrite(Resume resume, OutputStream os) throws IOException {
-        try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
+    protected final void doWrite(Resume resume, OutputStream os) throws IOException {
+        try (ObjectOutput oos = new ObjectOutputStream(os)) {
             oos.writeObject(resume);
         }
     }
 
     @Override
-    protected Resume doRead(InputStream is) throws IOException {
-        try (ObjectInputStream ois = new ObjectInputStream(is)) {
+    protected final Resume doRead(InputStream is) throws IOException {
+        try (ObjectInput ois = new ObjectInputStream(is)) {
             return (Resume) ois.readObject();
         } catch (ClassNotFoundException e) {
             throw new StorageException("Error while deserializing", null, e);

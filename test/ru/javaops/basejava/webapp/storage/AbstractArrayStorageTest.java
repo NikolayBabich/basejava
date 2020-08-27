@@ -6,12 +6,12 @@ import ru.javaops.basejava.webapp.exception.StorageException;
 import ru.javaops.basejava.webapp.model.Resume;
 
 public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
-    protected AbstractArrayStorageTest(Storage storage) {
+    AbstractArrayStorageTest(Storage storage) {
         super(storage);
     }
 
     @Test(expected = StorageException.class)
-    public void saveOverflowLimit() {
+    public final void saveOverflowLimit() {
         try {
             while (storage.size() < AbstractArrayStorage.STORAGE_LIMIT_SIZE) {
                 storage.save(new Resume("Joe Johns"));

@@ -10,10 +10,10 @@ import java.util.Collection;
  * Array based storage for Resumes
  */
 public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
-    static final int STORAGE_LIMIT_SIZE = 10_000;
+    static final int STORAGE_LIMIT_SIZE = 1_000;
 
-    protected final Resume[] storage = new Resume[STORAGE_LIMIT_SIZE];
-    protected int size = 0;
+    final Resume[] storage = new Resume[STORAGE_LIMIT_SIZE];
+    int size;
 
     /**
      * Removes all of the Resumes from this storage, all elements
@@ -72,12 +72,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected boolean isExists(Integer index) {
+    protected final boolean isExists(Integer index) {
         return index >= 0;
     }
 
     @Override
-    protected Collection<Resume> getAllResumes() {
+    protected final Collection<Resume> getAllResumes() {
         return Arrays.asList(Arrays.copyOf(storage, size));
     }
 }

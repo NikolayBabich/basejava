@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Objects;
 
 public final class Organization implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final Link homePage;
     private final List<Experience> experiences;
 
@@ -49,6 +51,8 @@ public final class Organization implements Serializable {
     }
 
     public static final class Experience implements Serializable {
+        private static final long serialVersionUID = 1L;
+
         private final LocalDate startDate;
         private final LocalDate finishDate;
         private final String title;

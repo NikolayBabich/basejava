@@ -41,7 +41,7 @@ public final class ListStorage extends AbstractStorage<Integer> {
 
     @Override
     protected Integer getSpecificSearchKey(String uuid) {
-        for (int i = 0; i < storage.size(); i++) {
+        for (int i = 0; i < size(); i++) {
             if (storage.get(i).getUuid().equals(uuid)) {
                 return i;
             }
