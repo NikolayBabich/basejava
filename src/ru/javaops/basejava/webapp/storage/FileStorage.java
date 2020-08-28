@@ -9,17 +9,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
+public final class FileStorage extends AbstractStorage<File> {
     private final File directory;
+    private SerializationStrategy strategy;
 
-    AbstractFileStorage(File directory) {
+    FileStorage(File directory) {
         Objects.requireNonNull(directory, "directory must not be null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath()
@@ -32,8 +31,12 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         this.directory = directory;
     }
 
+    void setStrategy(SerializationStrategy strategy) {
+        this.strategy = strategy;
+    }
+
     @Override
-    protected final void saveImpl(File file, Resume resume) {
+    protected void saveImpl(File file, Resume resume) {
         try {
             //noinspection ResultOfMethodCallIgnored
             file.createNewFile();
@@ -44,60 +47,58 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         updateImpl(file, resume);
     }
 
-    protected abstract void doWrite(Resume resume, OutputStream os) throws IOException;
 
     @Override
-    protected final void updateImpl(File file, Resume resume) {
+    protected void updateImpl(File file, Resume resume) {
         try {
-            doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
+            strategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("I/O error while writing ", file.getName(), e);
         }
     }
 
     @Override
-    protected final void deleteImpl(File file) {
+    protected void deleteImpl(File file) {
         if (!file.delete()) {
             throw new StorageException("I/O error while deleting", file.getName());
         }
     }
 
     @Override
-    protected final Resume getImpl(File file) {
+    protected Resume getImpl(File file) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream(file)));
+            return strategy.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("I/O error while reading", file.getName(), e);
         }
     }
 
-    protected abstract Resume doRead(InputStream is) throws IOException;
 
     @Override
-    protected final File getSpecificSearchKey(String uuid) {
+    protected File getSpecificSearchKey(String uuid) {
         return new File(directory, uuid);
     }
 
     @Override
-    protected final boolean isExists(File file) {
+    protected boolean isExists(File file) {
         return file.exists();
     }
 
     @Override
-    protected final Collection<Resume> getAllResumes() {
+    protected Collection<Resume> getAllResumes() {
         return Arrays.stream(getListFiles())
                 .map(this::getImpl)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public final void clear() {
+    public void clear() {
         Arrays.stream(getListFiles())
                 .forEach(this::deleteImpl);
     }
 
     @Override
-    public final int size() {
+    public int size() {
         return getListFiles().length;
     }
 
