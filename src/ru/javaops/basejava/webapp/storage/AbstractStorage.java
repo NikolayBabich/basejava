@@ -32,10 +32,10 @@ public abstract class AbstractStorage<SK> implements Storage {
     @Override
     public final void save(Resume resume) {
         LOG.info("Save " + resume);
-        saveImpl(getNotExistedSearchKey(resume.getUuid()), resume);
+        doSave(getNotExistedSearchKey(resume.getUuid()), resume);
     }
 
-    protected abstract void saveImpl(SK searchKey, Resume resume);
+    protected abstract void doSave(SK searchKey, Resume resume);
 
     /**
      * @param resume Resume to replace one with the same uuid in this storage
@@ -44,10 +44,10 @@ public abstract class AbstractStorage<SK> implements Storage {
     @Override
     public final void update(Resume resume) {
         LOG.info("Update " + resume);
-        updateImpl(getExistedSearchKey(resume.getUuid()), resume);
+        doUpdate(getExistedSearchKey(resume.getUuid()), resume);
     }
 
-    protected abstract void updateImpl(SK searchKey, Resume resume);
+    protected abstract void doUpdate(SK searchKey, Resume resume);
 
     /**
      * @param uuid identifier of Resume to be deleted from this storage
@@ -56,10 +56,10 @@ public abstract class AbstractStorage<SK> implements Storage {
     @Override
     public final void delete(String uuid) {
         LOG.info("Delete #" + uuid);
-        deleteImpl(getExistedSearchKey(uuid));
+        doDelete(getExistedSearchKey(uuid));
     }
 
-    protected abstract void deleteImpl(SK searchKey);
+    protected abstract void doDelete(SK searchKey);
 
     /**
      * @param uuid identifier of Resume to be returned
@@ -69,10 +69,10 @@ public abstract class AbstractStorage<SK> implements Storage {
     @Override
     public final Resume get(String uuid) {
         LOG.info("Get #" + uuid);
-        return getImpl(getExistedSearchKey(uuid));
+        return doGet(getExistedSearchKey(uuid));
     }
 
-    protected abstract Resume getImpl(SK searchKey);
+    protected abstract Resume doGet(SK searchKey);
 
     /**
      * Returns search key if Resume with {@code uuid} already exists in this storage
@@ -126,11 +126,11 @@ public abstract class AbstractStorage<SK> implements Storage {
      */
     @Override
     public final List<Resume> getAllSorted() {
-        Collection<Resume> resumes = getAllResumes();
+        Collection<Resume> resumes = getAll();
         return resumes.stream()
                 .sorted(DEFAULT_RESUME_COMPARATOR)
                 .collect(Collectors.toList());
     }
 
-    protected abstract Collection<Resume> getAllResumes();
+    protected abstract List<Resume> getAll();
 }

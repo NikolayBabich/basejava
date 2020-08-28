@@ -5,12 +5,12 @@ import ru.javaops.basejava.webapp.model.Resume;
 public final class MapUuidStorage extends AbstractMapStorage<String> {
 
     @Override
-    protected void deleteImpl(String uuid) {
+    protected void doDelete(String uuid) {
         storage.remove(uuid);
     }
 
     @Override
-    protected Resume getImpl(String uuid) {
+    protected Resume doGet(String uuid) {
         return storage.get(uuid);
     }
 

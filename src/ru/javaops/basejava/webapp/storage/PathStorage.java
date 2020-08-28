@@ -9,40 +9,38 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
-    private SerializationStrategy strategy;
+    private final SerializationStrategy strategy;
 
-    PathStorage(String dir) {
+    PathStorage(String dir, SerializationStrategy strategy) {
         Objects.requireNonNull(dir, "directory must not be null");
+        Objects.requireNonNull(strategy, "strategy must not be null");
         this.directory = Paths.get(dir);
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
         }
-    }
-
-    void setStrategy(SerializationStrategy strategy) {
         this.strategy = strategy;
     }
 
     @Override
-    protected void saveImpl(Path path, Resume resume) {
+    protected void doSave(Path path, Resume resume) {
         try {
             Files.createFile(path);
         } catch (IOException e) {
             throw new StorageException("I/O error while creating " + path,
                     path.getFileName().toString(), e);
         }
-        updateImpl(path, resume);
+        doUpdate(path, resume);
     }
 
     @Override
-    protected void updateImpl(Path path, Resume resume) {
+    protected void doUpdate(Path path, Resume resume) {
         try {
             strategy.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
@@ -52,7 +50,7 @@ public final class PathStorage extends AbstractStorage<Path> {
     }
 
     @Override
-    protected void deleteImpl(Path path) {
+    protected void doDelete(Path path) {
         try {
             Files.delete(path);
         } catch (IOException e) {
@@ -62,7 +60,7 @@ public final class PathStorage extends AbstractStorage<Path> {
     }
 
     @Override
-    protected Resume getImpl(Path path) {
+    protected Resume doGet(Path path) {
         try {
             return strategy.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
@@ -82,15 +80,15 @@ public final class PathStorage extends AbstractStorage<Path> {
     }
 
     @Override
-    protected Collection<Resume> getAllResumes() {
+    protected List<Resume> getAll() {
         return getAllPaths()
-                .map(this::getImpl)
+                .map(this::doGet)
                 .collect(Collectors.toList());
     }
 
     @Override
     public void clear() {
-        getAllPaths().forEach(this::deleteImpl);
+        getAllPaths().forEach(this::doDelete);
     }
 
     @Override
@@ -102,7 +100,7 @@ public final class PathStorage extends AbstractStorage<Path> {
         try {
             return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException("I/O error with directory", null, e);
+            throw new StorageException("I/O error with directory", e);
         }
     }
 }

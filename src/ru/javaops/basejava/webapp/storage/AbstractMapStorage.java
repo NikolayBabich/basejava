@@ -3,8 +3,8 @@ package ru.javaops.basejava.webapp.storage;
 import ru.javaops.basejava.webapp.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractMapStorage<SK> extends AbstractStorage<SK> {
@@ -21,17 +21,17 @@ public abstract class AbstractMapStorage<SK> extends AbstractStorage<SK> {
     }
 
     @Override
-    protected final void saveImpl(SK searchKey, Resume resume) {
+    protected final void doSave(SK searchKey, Resume resume) {
         storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected final void updateImpl(SK searchKey, Resume resume) {
+    protected final void doUpdate(SK searchKey, Resume resume) {
         storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected final Collection<Resume> getAllResumes() {
+    protected final List<Resume> getAll() {
         return new ArrayList<>(storage.values());
     }
 }

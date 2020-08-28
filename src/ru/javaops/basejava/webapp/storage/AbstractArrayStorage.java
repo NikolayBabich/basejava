@@ -4,7 +4,7 @@ import ru.javaops.basejava.webapp.exception.StorageException;
 import ru.javaops.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Array based storage for Resumes
@@ -34,7 +34,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected final void saveImpl(Integer index, Resume resume) {
+    protected final void doSave(Integer index, Resume resume) {
         if (size >= STORAGE_LIMIT_SIZE) {
             throw new StorageException("Resume storage limit size has been reached",
                     resume.getUuid());
@@ -50,12 +50,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected abstract void doInsert(int index, Resume resume);
 
     @Override
-    protected final void updateImpl(Integer index, Resume resume) {
+    protected final void doUpdate(Integer index, Resume resume) {
         storage[index] = resume;
     }
 
     @Override
-    protected final void deleteImpl(Integer index) {
+    protected final void doDelete(Integer index) {
         doRemove(index);
         storage[size - 1] = null;
         size--;
@@ -67,7 +67,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected abstract void doRemove(int index);
 
     @Override
-    protected final Resume getImpl(Integer index) {
+    protected final Resume doGet(Integer index) {
         return storage[index];
     }
 
@@ -77,7 +77,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected final Collection<Resume> getAllResumes() {
+    protected final List<Resume> getAll() {
         return Arrays.asList(Arrays.copyOf(storage, size));
     }
 }

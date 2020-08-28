@@ -5,12 +5,12 @@ import ru.javaops.basejava.webapp.model.Resume;
 public final class MapResumeStorage extends AbstractMapStorage<Resume> {
 
     @Override
-    protected void deleteImpl(Resume resume) {
+    protected void doDelete(Resume resume) {
         storage.remove(resume.getUuid());
     }
 
     @Override
-    protected Resume getImpl(Resume resume) {
+    protected Resume doGet(Resume resume) {
         return resume;
     }
 

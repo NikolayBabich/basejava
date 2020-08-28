@@ -3,7 +3,6 @@ package ru.javaops.basejava.webapp.storage;
 import ru.javaops.basejava.webapp.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public final class ListStorage extends AbstractStorage<Integer> {
@@ -20,22 +19,22 @@ public final class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected void saveImpl(Integer searchKey, Resume resume) {
+    protected void doSave(Integer searchKey, Resume resume) {
         storage.add(resume);
     }
 
     @Override
-    protected void updateImpl(Integer index, Resume resume) {
+    protected void doUpdate(Integer index, Resume resume) {
         storage.set(index, resume);
     }
 
     @Override
-    protected void deleteImpl(Integer index) {
+    protected void doDelete(Integer index) {
         storage.remove(index.intValue());
     }
 
     @Override
-    protected Resume getImpl(Integer index) {
+    protected Resume doGet(Integer index) {
         return storage.get(index);
     }
 
@@ -55,7 +54,7 @@ public final class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected Collection<Resume> getAllResumes() {
+    protected List<Resume> getAll() {
         return new ArrayList<>(storage);
     }
 }
