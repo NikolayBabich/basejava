@@ -22,16 +22,16 @@ public abstract class AbstractSection<T> implements Serializable {
 
         AbstractSection<?> that = (AbstractSection<?>) o;
 
-        return content != null ? content.equals(that.content) : that.content == null;
+        return content.equals(that.content);
     }
 
     @Override
     public final int hashCode() {
-        return content != null ? content.hashCode() : 0;
+        return content.hashCode();
     }
 
     @Override
     public final String toString() {
-        return (content == null) ? "" : content.toString();
+        return content.toString();
     }
 }

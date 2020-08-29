@@ -23,9 +23,9 @@ public final class SortedArrayStorage extends AbstractArrayStorage {
 
     /**
      * @param uuid identifier of Resume to be returned
-     * @return index in array storage for this Resume, or negative value if none
-     *         otherwise, (-(insertion point) - 1). The insertion point defined as
-     *         the point at which the key would be inserted.
+     * @return index of the search key, if it is contained in the array storage;
+     *         otherwise, <code>(-(<i>insertion point</i>) - 1)</code>. The <i>insertion point</i> defined
+     *         as the point at which the key would be inserted.
      * @see Arrays#binarySearch(Object[], int, int, Object)
      */
     @Override

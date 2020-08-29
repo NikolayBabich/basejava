@@ -121,8 +121,7 @@ public abstract class AbstractStorage<SK> implements Storage {
     protected abstract boolean isExists(SK searchKey);
 
     /**
-     * @return {@code List} containing all Resumes sorted
-     *          with {@code DEFAULT_RESUME_COMPARATOR}
+     * @return {@code List} containing all Resumes in this storage sorted with {@code DEFAULT_RESUME_COMPARATOR}
      */
     @Override
     public final List<Resume> getAllSorted() {
@@ -132,5 +131,8 @@ public abstract class AbstractStorage<SK> implements Storage {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * @return {@code List} containing all Resumes in this storage (depending on implementation)
+     */
     protected abstract List<Resume> getAll();
 }

@@ -16,8 +16,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     int size;
 
     /**
-     * Removes all of the Resumes from this storage, all elements
-     * of array are set to null
+     * Removes all of the Resumes from this storage, all elements of array are set to null
      */
     @Override
     public final void clear() {
@@ -36,8 +35,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     @Override
     protected final void doSave(Integer index, Resume resume) {
         if (size >= STORAGE_LIMIT_SIZE) {
-            throw new StorageException("Resume storage limit size has been reached",
-                    resume.getUuid());
+            throw new StorageException("Resume storage limit size has been reached", resume.getUuid());
         }
         doInsert(index, resume);
         size++;

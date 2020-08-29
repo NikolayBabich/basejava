@@ -33,8 +33,7 @@ public final class PathStorage extends AbstractStorage<Path> {
         try {
             Files.createFile(path);
         } catch (IOException e) {
-            throw new StorageException("I/O error while creating " + path,
-                    path.getFileName().toString(), e);
+            throw new StorageException("I/O error while creating " + path, path.getFileName().toString(), e);
         }
         doUpdate(path, resume);
     }
@@ -44,8 +43,7 @@ public final class PathStorage extends AbstractStorage<Path> {
         try {
             strategy.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("I/O error while writing ",
-                    path.getFileName().toString(), e);
+            throw new StorageException("I/O error while writing ", path.getFileName().toString(), e);
         }
     }
 
@@ -54,8 +52,7 @@ public final class PathStorage extends AbstractStorage<Path> {
         try {
             Files.delete(path);
         } catch (IOException e) {
-            throw new StorageException("I/O error while deleting",
-                    path.getFileName().toString(), e);
+            throw new StorageException("I/O error while deleting", path.getFileName().toString(), e);
         }
     }
 
@@ -64,8 +61,7 @@ public final class PathStorage extends AbstractStorage<Path> {
         try {
             return strategy.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("I/O error while reading",
-                    path.getFileName().toString(), e);
+            throw new StorageException("I/O error while reading", path.getFileName().toString(), e);
         }
     }
 

@@ -2,6 +2,7 @@ package ru.javaops.basejava.webapp.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,10 +12,13 @@ public final class Organization implements Serializable {
     private final Link homePage;
     private final List<Experience> experiences;
 
-    public Organization(String textLink, String urlLink,
-                        List<Experience> experiences) {
+    public Organization(String textLink, String urlLink, Experience... experiences) {
+        this(new Link(textLink, urlLink), Arrays.asList(experiences));
+    }
+
+    private Organization(Link homePage, List<Experience> experiences) {
         Objects.requireNonNull(experiences, "experiences must not be null");
-        this.homePage = new Link(textLink, urlLink);
+        this.homePage = homePage;
         this.experiences = experiences;
     }
 
@@ -46,8 +50,7 @@ public final class Organization implements Serializable {
 
     @Override
     public String toString() {
-        return "\n\n" + homePage + '\n' +
-                experiences;
+        return "\n\n" + homePage + '\n' + experiences;
     }
 
     public static final class Experience implements Serializable {
@@ -58,8 +61,7 @@ public final class Organization implements Serializable {
         private final String title;
         private final String description;
 
-        public Experience(LocalDate startDate, LocalDate finishDate,
-                          String title, String description) {
+        public Experience(LocalDate startDate, LocalDate finishDate, String title, String description) {
             Objects.requireNonNull(startDate, "startDate must not be null");
             Objects.requireNonNull(finishDate, "finishDate must not be null");
             Objects.requireNonNull(title, "title must not be null");
@@ -95,9 +97,7 @@ public final class Organization implements Serializable {
             if (!startDate.equals(that.startDate)) return false;
             if (!finishDate.equals(that.finishDate)) return false;
             if (!title.equals(that.title)) return false;
-            return description != null
-                    ? description.equals(that.description)
-                    : that.description == null;
+            return description != null ? description.equals(that.description) : that.description == null;
         }
 
         @Override
@@ -114,8 +114,8 @@ public final class Organization implements Serializable {
             String startDateText =
                     String.format("%02d\\%04d", startDate.getMonthValue(), startDate.getYear());
             String finishDateText = (finishDate.isAfter(LocalDate.now()))
-                    ? "Сейчас"
-                    : String.format("%02d\\%04d", finishDate.getMonthValue(), finishDate.getYear());
+                                    ? "Сейчас"
+                                    : String.format("%02d\\%04d", finishDate.getMonthValue(), finishDate.getYear());
             String descriptionText = (description == null) ? "" : description;
 
             return startDateText + " - " + finishDateText + "\t\t" +

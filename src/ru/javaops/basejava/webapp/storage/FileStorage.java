@@ -22,12 +22,10 @@ public final class FileStorage extends AbstractStorage<File> {
         Objects.requireNonNull(directory, "directory must not be null");
         Objects.requireNonNull(strategy, "strategy must not be null");
         if (!directory.isDirectory()) {
-            throw new IllegalArgumentException(directory.getAbsolutePath()
-                    + " is not directory");
+            throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
         if (!directory.canRead() || !directory.canWrite()) {
-            throw new IllegalArgumentException(directory.getAbsolutePath()
-                    + " is not readable/writable");
+            throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
         this.directory = directory;
         this.strategy = strategy;
@@ -36,11 +34,9 @@ public final class FileStorage extends AbstractStorage<File> {
     @Override
     protected void doSave(File file, Resume resume) {
         try {
-            //noinspection ResultOfMethodCallIgnored
             file.createNewFile();
         } catch (IOException e) {
-            throw new StorageException("I/O error while creating " + file.getAbsolutePath(),
-                    file.getName(), e);
+            throw new StorageException("I/O error while creating " + file.getAbsolutePath(), file.getName(), e);
         }
         doUpdate(file, resume);
     }
