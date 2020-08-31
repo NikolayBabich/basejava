@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
@@ -17,7 +18,7 @@ public final class Resume implements Comparable<Resume>, Serializable {
     private String uuid;
     private String fullName;
     private final Map<ContactType, Link> contacts = new EnumMap<>(ContactType.class);
-    private final Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+    private final Map<SectionType, AbstractSection<?>> sections = new EnumMap<>(SectionType.class);
 
     private Resume() {
     }
@@ -41,6 +42,10 @@ public final class Resume implements Comparable<Resume>, Serializable {
         return fullName;
     }
 
+    public Map<ContactType, Link> getContacts() {
+        return Collections.unmodifiableMap(contacts);
+    }
+
     public Link getContact(ContactType type) {
         return contacts.get(type);
     }
@@ -49,11 +54,14 @@ public final class Resume implements Comparable<Resume>, Serializable {
         contacts.put(type, contact);
     }
 
-    public AbstractSection getSection(SectionType type) {
+    public Map<SectionType, AbstractSection<?>> getSections() {
+        return sections;
+    }
+    public AbstractSection<?> getSection(SectionType type) {
         return sections.get(type);
     }
 
-    public void setSection(SectionType type, AbstractSection section) {
+    public void setSection(SectionType type, AbstractSection<?> section) {
         sections.put(type, section);
     }
 

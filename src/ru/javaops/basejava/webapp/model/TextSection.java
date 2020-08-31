@@ -1,23 +1,35 @@
 package ru.javaops.basejava.webapp.model;
 
-public final class TextSection extends AbstractSection {
+public final class TextSection extends AbstractSection<String> {
     private static final long serialVersionUID = 1L;
 
     private String content;
 
-    private TextSection() {
+    public TextSection() {
     }
 
     public TextSection(String content) {
         this.content = content;
     }
 
+    @Override
     public String getContent() {
         return content;
     }
 
+    @Override
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public String getSerializedContent() {
+        return content;
+    }
+
+    @Override
+    public void setDeserializedContent(String serializedContent) {
+        content = serializedContent;
     }
 
     @Override
@@ -33,5 +45,10 @@ public final class TextSection extends AbstractSection {
     @Override
     public int hashCode() {
         return content != null ? content.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return content;
     }
 }
