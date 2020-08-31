@@ -1,13 +1,19 @@
 package ru.javaops.basejava.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serializable;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public final class Link implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final String text;
-    private final String url;
+    private String text;
+    private String url;
+
+    private Link() {
+    }
 
     public Link(String textLink, String url) {
         Objects.requireNonNull(textLink, "textLink must not be null");

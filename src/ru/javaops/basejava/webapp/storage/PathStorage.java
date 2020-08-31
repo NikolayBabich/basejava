@@ -2,6 +2,7 @@ package ru.javaops.basejava.webapp.storage;
 
 import ru.javaops.basejava.webapp.exception.StorageException;
 import ru.javaops.basejava.webapp.model.Resume;
+import ru.javaops.basejava.webapp.storage.serialization.SerializationStrategy;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -33,7 +34,7 @@ public final class PathStorage extends AbstractStorage<Path> {
         try {
             Files.createFile(path);
         } catch (IOException e) {
-            throw new StorageException("I/O error while creating " + path, path.getFileName().toString(), e);
+            throw new StorageException("I/O error while creating " + path, getFileName(path), e);
         }
         doUpdate(path, resume);
     }
@@ -43,7 +44,7 @@ public final class PathStorage extends AbstractStorage<Path> {
         try {
             strategy.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("I/O error while writing ", path.getFileName().toString(), e);
+            throw new StorageException("I/O error while writing ", getFileName(path), e);
         }
     }
 
@@ -52,7 +53,7 @@ public final class PathStorage extends AbstractStorage<Path> {
         try {
             Files.delete(path);
         } catch (IOException e) {
-            throw new StorageException("I/O error while deleting", path.getFileName().toString(), e);
+            throw new StorageException("I/O error while deleting", getFileName(path), e);
         }
     }
 
@@ -61,8 +62,12 @@ public final class PathStorage extends AbstractStorage<Path> {
         try {
             return strategy.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("I/O error while reading", path.getFileName().toString(), e);
+            throw new StorageException("I/O error while reading", getFileName(path), e);
         }
+    }
+
+    private static String getFileName(Path path) {
+        return path.getFileName().toString();
     }
 
     @Override
@@ -72,7 +77,7 @@ public final class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected boolean isExists(Path path) {
-        return Files.exists(path);
+        return Files.isRegularFile(path);
     }
 
     @Override
