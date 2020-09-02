@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -15,14 +14,11 @@ import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 public final class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static final String DELIMITER = "<!>";
-    private static final int FIRST_DATA_INDEX = 3;
-    private static final int OFFSET_INDEX = 4;
 
     private Link homePage;
     private List<Experience> experiences;
 
-    Organization() {
+    public Organization() {
     }
 
     public Organization(String textLink, String urlLink, Experience... experiences) {
@@ -39,8 +35,16 @@ public final class Organization implements Serializable {
         return homePage;
     }
 
+    public void setHomePage(Link homePage) {
+        this.homePage = homePage;
+    }
+
     public List<Experience> getExperiences() {
         return experiences;
+    }
+
+    public void setExperiences(List<Experience> experiences) {
+        this.experiences = experiences;
     }
 
     @Override
@@ -64,40 +68,6 @@ public final class Organization implements Serializable {
     @Override
     public String toString() {
         return "\n\n" + homePage + '\n' + experiences;
-    }
-
-    String getSerialized() {
-        StringBuilder sb = new StringBuilder();
-        appendWithDelimiter(sb, homePage.getText(), homePage.getUrl(), String.valueOf(experiences.size()));
-        for (Experience exp : experiences) {
-            appendWithDelimiter(sb,
-                                exp.getStartDate().toString(), exp.getFinishDate().toString(),
-                                exp.getTitle(), exp.getDescription());
-        }
-        return sb.toString();
-    }
-
-    private static void appendWithDelimiter(StringBuilder sb, String... lines) {
-        Arrays.asList(lines).forEach(s -> sb.append(s).append(DELIMITER));
-    }
-
-    void setDeserialized(String line) {
-        String[] lines = line.split(DELIMITER);
-
-        String textLink = lines[0];
-        String urlLink = "null".equals(lines[1]) ? null : lines[1];
-        homePage = new Link(textLink, urlLink);
-
-        int size = Integer.parseInt(lines[2]);
-        experiences = new ArrayList<>();
-        for (int count = 0, idx = FIRST_DATA_INDEX; count < size; count++, idx += OFFSET_INDEX) {
-            String title = lines[idx + 2];
-            String description = "null".equals(lines[idx + 3]) ? null : lines[idx + 3];
-            experiences.add(new Experience(
-                    LocalDate.parse(lines[idx]), LocalDate.parse(lines[idx + 1]),
-                    title, description
-            ));
-        }
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
@@ -124,19 +94,19 @@ public final class Organization implements Serializable {
             this.description = description;
         }
 
-        LocalDate getStartDate() {
+        public LocalDate getStartDate() {
             return startDate;
         }
 
-        LocalDate getFinishDate() {
+        public LocalDate getFinishDate() {
             return finishDate;
         }
 
-        String getTitle() {
+        public String getTitle() {
             return title;
         }
 
-        String getDescription() {
+        public String getDescription() {
             return description;
         }
 

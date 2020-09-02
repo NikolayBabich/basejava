@@ -1,11 +1,9 @@
 package ru.javaops.basejava.webapp.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public final class OrganizationSection extends AbstractSection<List<Organization>> {
+public final class OrganizationSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
-    private static final String DELIMITER = "<-->";
 
     private List<Organization> content;
 
@@ -16,35 +14,12 @@ public final class OrganizationSection extends AbstractSection<List<Organization
         this.content = content;
     }
 
-    @Override
     public List<Organization> getContent() {
         return content;
     }
 
-    @Override
-    void setContent(List<Organization> content) {
+    public void setContent(List<Organization> content) {
         this.content = content;
-    }
-
-    @Override
-    public String getSerializedContent() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(content.size()).append(DELIMITER);
-        content.forEach(o -> sb.append(o.getSerialized()).append(DELIMITER));
-        return sb.toString();
-    }
-
-    @Override
-    public void setDeserializedContent(String serializedContent) {
-        String[] lines = serializedContent.split(DELIMITER);
-
-        content = new ArrayList<>();
-        int size = Integer.parseInt(lines[0]);
-        for (int i = 1; i <= size; i++) {
-            Organization organization = new Organization();
-            organization.setDeserialized(lines[i]);
-            content.add(organization);
-        }
     }
 
     @Override

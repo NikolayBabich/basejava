@@ -1,6 +1,6 @@
 package ru.javaops.basejava.webapp.model;
 
-public final class TextSection extends AbstractSection<String> {
+public final class TextSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
 
     private String content;
@@ -12,24 +12,12 @@ public final class TextSection extends AbstractSection<String> {
         this.content = content;
     }
 
-    @Override
     public String getContent() {
         return content;
     }
 
-    @Override
     public void setContent(String content) {
         this.content = content;
-    }
-
-    @Override
-    public String getSerializedContent() {
-        return content;
-    }
-
-    @Override
-    public void setDeserializedContent(String serializedContent) {
-        content = serializedContent;
     }
 
     @Override
