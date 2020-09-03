@@ -7,7 +7,7 @@ public final class ListSection extends AbstractSection {
 
     private List<String> content;
 
-    public ListSection() {
+    private ListSection() {
     }
 
     public ListSection(List<String> content) {

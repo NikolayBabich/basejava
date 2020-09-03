@@ -25,7 +25,7 @@ public final class Organization implements Serializable {
         this(new Link(textLink, urlLink), Arrays.asList(experiences));
     }
 
-    private Organization(Link homePage, List<Experience> experiences) {
+    public Organization(Link homePage, List<Experience> experiences) {
         Objects.requireNonNull(experiences, "experiences must not be null");
         this.homePage = homePage;
         this.experiences = experiences;
@@ -35,16 +35,8 @@ public final class Organization implements Serializable {
         return homePage;
     }
 
-    public void setHomePage(Link homePage) {
-        this.homePage = homePage;
-    }
-
     public List<Experience> getExperiences() {
         return experiences;
-    }
-
-    public void setExperiences(List<Experience> experiences) {
-        this.experiences = experiences;
     }
 
     @Override

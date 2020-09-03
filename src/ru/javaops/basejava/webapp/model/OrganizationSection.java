@@ -7,7 +7,7 @@ public final class OrganizationSection extends AbstractSection {
 
     private List<Organization> content;
 
-    public OrganizationSection() {
+    private OrganizationSection() {
     }
 
     public OrganizationSection(List<Organization> content) {
@@ -16,10 +16,6 @@ public final class OrganizationSection extends AbstractSection {
 
     public List<Organization> getContent() {
         return content;
-    }
-
-    public void setContent(List<Organization> content) {
-        this.content = content;
     }
 
     @Override

@@ -11,7 +11,7 @@ import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
 
-public final class JsonSectionAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T> {
+final class JsonSectionAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T> {
     private static final String CLASSNAME = "CLASSNAME";
     private static final String INSTANCE = "INSTANCE";
 

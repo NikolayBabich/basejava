@@ -5,7 +5,7 @@ public final class TextSection extends AbstractSection {
 
     private String content;
 
-    public TextSection() {
+    private TextSection() {
     }
 
     public TextSection(String content) {

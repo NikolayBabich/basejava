@@ -17,15 +17,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 public final class DataStreamStrategy implements SerializationStrategy {
-    private static final String LIST_DELIMITER = "<-->";
-    private static final String ORGANIZATION_DELIMITER = "<!>";
-    private static final int FIRST_DATA_INDEX = 3;
-    private static final int OFFSET_INDEX = 4;
+    private static final String NULL = "null";
 
     @Override
     public void doWrite(Resume resume, OutputStream os) throws IOException {
@@ -33,143 +30,130 @@ public final class DataStreamStrategy implements SerializationStrategy {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
 
-            Map<ContactType, Link> contacts = resume.getContacts();
-            dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, Link> entry : contacts.entrySet()) {
+            writeCollection(dos, resume.getContacts().entrySet(), entry -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue().getText());
-                String url = entry.getValue().getUrl();
-                dos.writeUTF((url != null) ? url : "null");
-            }
+                dos.writeUTF(writeNullable(entry.getValue().getUrl()));
+            });
 
-            Map<SectionType, AbstractSection> sections = resume.getSections();
-            dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
-                String keyName = entry.getKey().name();
-                dos.writeUTF(keyName);
-                AbstractSection section = entry.getValue();
-                dos.writeUTF(getSerializedContent(section));
-            }
+            writeCollection(dos, resume.getSections().entrySet(), entry -> {
+                dos.writeUTF(entry.getKey().name());
+                writeSection(dos, entry.getKey(), entry.getValue());
+            });
         }
+    }
+
+    private static void writeSection(DataOutputStream dos, SectionType type, AbstractSection section) throws IOException {
+        switch (type) {
+            case OBJECTIVE:
+            case PERSONAL:
+                dos.writeUTF(((TextSection) section).getContent());
+                break;
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                writeCollection(dos, ((ListSection) section).getContent(), dos::writeUTF);
+                break;
+            case EXPERIENCE:
+            case EDUCATION:
+                writeCollection(dos, ((OrganizationSection) section).getContent(), org -> {
+                    dos.writeUTF(org.getHomePage().getText());
+                    dos.writeUTF(writeNullable(org.getHomePage().getUrl()));
+                    writeCollection(dos, org.getExperiences(), exp -> {
+                        dos.writeUTF(exp.getStartDate().toString());
+                        dos.writeUTF(exp.getFinishDate().toString());
+                        dos.writeUTF(exp.getTitle());
+                        dos.writeUTF(writeNullable(exp.getDescription()));
+                    });
+                });
+                break;
+            default:
+                throw new AssertionError("Should not get here");
+        }
+    }
+
+    private static String writeNullable(String s) {
+        return (s != null) ? s : NULL;
+    }
+
+    private static <T> void writeCollection(DataOutputStream dos, Collection<T> collection, ElementWriter<T> action) throws IOException {
+        Objects.requireNonNull(collection);
+        Objects.requireNonNull(action);
+        dos.writeInt(collection.size());
+        for (T t : collection) {
+            action.write(t);
+        }
+    }
+
+    @FunctionalInterface
+    private interface ElementWriter<T> {
+        void write(T t) throws IOException;
     }
 
     @Override
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
-            String uuid = dis.readUTF();
-            String fullName = dis.readUTF();
-            Resume resume = new Resume(uuid, fullName);
+            Resume resume = new Resume(dis.readUTF(), dis.readUTF());
 
-            int contactsSize = dis.readInt();
-            for (int i = 0; i < contactsSize; i++) {
-                String type = dis.readUTF();
-                String textLink = dis.readUTF();
-                String urlLink = dis.readUTF();
-                if ("null".equals(urlLink)) {
-                    urlLink = null;
-                }
-                resume.setContact(ContactType.valueOf(type), new Link(textLink, urlLink));
-            }
-
-            int sectionsSize = dis.readInt();
-            for (int i = 0; i < sectionsSize; i++) {
+            processData(dis, () -> resume.setContact(ContactType.valueOf(dis.readUTF()),
+                                                     new Link(dis.readUTF(), readNullable(dis.readUTF()))));
+            processData(dis, () -> {
                 SectionType type = SectionType.valueOf(dis.readUTF());
-                AbstractSection section;
-                switch (type) {
-                    case OBJECTIVE:
-                    case PERSONAL:
-                        section = new TextSection();
-                        break;
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
-                        section = new ListSection();
-                        break;
-                    case EXPERIENCE:
-                    case EDUCATION:
-                        section = new OrganizationSection();
-                        break;
-                    default:
-                        throw new AssertionError("Should not get here");
-                }
-                setDeserializedContent(section, dis.readUTF());
-                resume.setSection(type, section);
-            }
+                resume.setSection(type, readSection(dis, type));
+            });
+
             return resume;
         }
     }
 
-    private static String getSerializedContent(AbstractSection section) {
-        if (section.getClass() == TextSection.class) {
-            return ((TextSection) section).getContent();
-        }
-        StringBuilder sb = new StringBuilder();
-        if (section.getClass() == ListSection.class) {
-            List<String> listSectionContent = ((ListSection) section).getContent();
-            sb.append(listSectionContent.size()).append(LIST_DELIMITER);
-            listSectionContent.forEach(e -> sb.append(e).append(LIST_DELIMITER));
-        } else if (section.getClass() == OrganizationSection.class) {
-            List<Organization> orgSectionContent = ((OrganizationSection) section).getContent();
-            sb.append(orgSectionContent.size()).append(LIST_DELIMITER);
-            orgSectionContent.forEach(o -> sb.append(getSerialized(o)).append(LIST_DELIMITER));
-        }
-        return sb.toString();
-    }
-
-    private static String getSerialized(Organization organization) {
-        StringBuilder sb = new StringBuilder();
-        Link homePage = organization.getHomePage();
-        List<Organization.Experience> experiences = organization.getExperiences();
-        appendWithDelimiter(sb, homePage.getText(), homePage.getUrl(), String.valueOf(experiences.size()));
-        for (Organization.Experience exp : experiences) {
-            appendWithDelimiter(sb,
-                                exp.getStartDate().toString(), exp.getFinishDate().toString(),
-                                exp.getTitle(), exp.getDescription());
-        }
-        return sb.toString();
-    }
-
-    private static void appendWithDelimiter(StringBuilder sb, String... lines) {
-        Arrays.asList(lines).forEach(s -> sb.append(s).append(ORGANIZATION_DELIMITER));
-    }
-
-    private static void setDeserializedContent(AbstractSection section, String serializedContent) {
-        if (section.getClass() == TextSection.class) {
-            ((TextSection) section).setContent(serializedContent);
-            return;
-        }
-        String[] lines = serializedContent.split(LIST_DELIMITER);
-        int size = Integer.parseInt(lines[0]);
-        if (section.getClass() == ListSection.class) {
-            List<String> content = new ArrayList<>(Arrays.asList(lines).subList(1, size + 1));
-            ((ListSection) section).setContent(content);
-        } else if (section.getClass() == OrganizationSection.class) {
-            List<Organization> content = new ArrayList<>(size);
-            for (int i = 1; i <= size; i++) {
-                Organization organization = new Organization();
-                setDeserialized(organization, lines[i]);
-                content.add(organization);
-            }
-            ((OrganizationSection) section).setContent(content);
+    private static void processData(DataInputStream dis, ElementProcessor action) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            action.process();
         }
     }
 
-    private static void setDeserialized(Organization organization, String line) {
-        String[] lines = line.split(ORGANIZATION_DELIMITER);
+    @FunctionalInterface
+    private interface ElementProcessor {
+        void process() throws IOException;
+    }
 
-        String textLink = lines[0];
-        String urlLink = "null".equals(lines[1]) ? null : lines[1];
-        organization.setHomePage(new Link(textLink, urlLink));
-
-        int size = Integer.parseInt(lines[2]);
-        List<Organization.Experience> experiences = new ArrayList<>();
-        for (int count = 0, idx = FIRST_DATA_INDEX; count < size; count++, idx += OFFSET_INDEX) {
-            String title = lines[idx + 2];
-            String description = "null".equals(lines[idx + 3]) ? null : lines[idx + 3];
-            experiences.add(new Organization.Experience(
-                    LocalDate.parse(lines[idx]), LocalDate.parse(lines[idx + 1]),
-                    title, description
-            ));
+    private static AbstractSection readSection(DataInputStream dis, SectionType type) throws IOException {
+        switch (type) {
+            case OBJECTIVE:
+            case PERSONAL:
+                return new TextSection(dis.readUTF());
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                return new ListSection(readList(dis, dis::readUTF));
+            case EXPERIENCE:
+            case EDUCATION:
+                return new OrganizationSection(readList(dis, () -> new Organization(
+                        new Link(dis.readUTF(), readNullable(dis.readUTF())),
+                        readList(dis, () -> new Organization.Experience(LocalDate.parse(dis.readUTF()), LocalDate.parse(dis.readUTF()),
+                                                                        dis.readUTF(), readNullable(dis.readUTF()))
+                        )
+                )));
+            default:
+                throw new AssertionError("Should not get here");
         }
-        organization.setExperiences(experiences);
+    }
+
+    private static String readNullable(String s) {
+        return (NULL.equals(s)) ? null : s;
+    }
+
+    private static <T> List<T> readList(DataInputStream dis, ElementReader<T> action) throws IOException {
+        Objects.requireNonNull(action);
+        int size = dis.readInt();
+        List<T> result = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            result.add(action.read());
+        }
+        return result;
+    }
+
+    @FunctionalInterface
+    private interface ElementReader<T> {
+        T read() throws IOException;
     }
 }
