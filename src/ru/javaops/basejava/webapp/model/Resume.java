@@ -20,6 +20,7 @@ public final class Resume implements Comparable<Resume>, Serializable {
     private final Map<ContactType, Link> contacts = new EnumMap<>(ContactType.class);
     private final Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
+    @SuppressWarnings("unused")  //  for XML unmarshalling
     private Resume() {
     }
 
@@ -57,6 +58,7 @@ public final class Resume implements Comparable<Resume>, Serializable {
     public Map<SectionType, AbstractSection> getSections() {
         return sections;
     }
+
     public AbstractSection getSection(SectionType type) {
         return sections.get(type);
     }

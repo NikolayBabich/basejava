@@ -33,6 +33,17 @@ public final class FileStorage extends AbstractStorage<File> {
     }
 
     @Override
+    public void clear() {
+        Arrays.stream(getListFiles())
+                .forEach(this::doDelete);
+    }
+
+    @Override
+    public int size() {
+        return getListFiles().length;
+    }
+
+    @Override
     protected void doSave(File file, Resume resume) {
         try {
             file.createNewFile();
@@ -68,16 +79,6 @@ public final class FileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected File getSpecificSearchKey(String uuid) {
-        return new File(directory, uuid);
-    }
-
-    @Override
-    protected boolean isExists(File file) {
-        return file.exists();
-    }
-
-    @Override
     protected List<Resume> getAll() {
         return Arrays.stream(getListFiles())
                 .map(this::doGet)
@@ -85,14 +86,13 @@ public final class FileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    public void clear() {
-        Arrays.stream(getListFiles())
-                .forEach(this::doDelete);
+    protected File getSpecificSearchKey(String uuid) {
+        return new File(directory, uuid);
     }
 
     @Override
-    public int size() {
-        return getListFiles().length;
+    protected boolean isExists(File file) {
+        return file.exists();
     }
 
     private File[] getListFiles() {

@@ -70,12 +70,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected final boolean isExists(Integer index) {
-        return index >= 0;
+    protected final List<Resume> getAll() {
+        return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
     @Override
-    protected final List<Resume> getAll() {
-        return Arrays.asList(Arrays.copyOf(storage, size));
+    protected final boolean isExists(Integer index) {
+        return index >= 0;
     }
 }

@@ -12,6 +12,7 @@ public final class Link implements Serializable {
     private String text;
     private String url;
 
+    @SuppressWarnings("unused")  //  for XML unmarshalling
     private Link() {
     }
 

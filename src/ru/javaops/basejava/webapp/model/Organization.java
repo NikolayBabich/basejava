@@ -18,6 +18,7 @@ public final class Organization implements Serializable {
     private Link homePage;
     private List<Experience> experiences;
 
+    @SuppressWarnings("unused")  //  for XML unmarshalling
     public Organization() {
     }
 
@@ -73,6 +74,7 @@ public final class Organization implements Serializable {
         private String title;
         private String description;
 
+        @SuppressWarnings("unused")  //  for XML unmarshalling
         private Experience() {
         }
 

@@ -30,6 +30,16 @@ public final class PathStorage extends AbstractStorage<Path> {
     }
 
     @Override
+    public void clear() {
+        getAllPaths().forEach(this::doDelete);
+    }
+
+    @Override
+    public int size() {
+        return (int) getAllPaths().count();
+    }
+
+    @Override
     protected void doSave(Path path, Resume resume) {
         try {
             Files.createFile(path);
@@ -66,8 +76,11 @@ public final class PathStorage extends AbstractStorage<Path> {
         }
     }
 
-    private static String getFileName(Path path) {
-        return path.getFileName().toString();
+    @Override
+    protected List<Resume> getAll() {
+        return getAllPaths()
+                .map(this::doGet)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -80,21 +93,8 @@ public final class PathStorage extends AbstractStorage<Path> {
         return Files.isRegularFile(path);
     }
 
-    @Override
-    protected List<Resume> getAll() {
-        return getAllPaths()
-                .map(this::doGet)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void clear() {
-        getAllPaths().forEach(this::doDelete);
-    }
-
-    @Override
-    public int size() {
-        return (int) getAllPaths().count();
+    private static String getFileName(Path path) {
+        return path.getFileName().toString();
     }
 
     private Stream<Path> getAllPaths() {

@@ -7,6 +7,7 @@ public final class ListSection extends AbstractSection {
 
     private List<String> content;
 
+    @SuppressWarnings("unused")  //  for XML unmarshalling
     private ListSection() {
     }
 

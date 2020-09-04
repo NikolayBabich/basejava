@@ -7,6 +7,7 @@ public final class OrganizationSection extends AbstractSection {
 
     private List<Organization> content;
 
+    @SuppressWarnings("unused")  //  for XML unmarshalling
     private OrganizationSection() {
     }
 

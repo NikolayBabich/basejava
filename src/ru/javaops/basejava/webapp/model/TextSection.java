@@ -5,6 +5,7 @@ public final class TextSection extends AbstractSection {
 
     private String content;
 
+    @SuppressWarnings("unused")  //  for XML unmarshalling
     private TextSection() {
     }
 

@@ -39,6 +39,11 @@ public final class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
+    protected List<Resume> getAll() {
+        return new ArrayList<>(storage);
+    }
+
+    @Override
     protected Integer getSpecificSearchKey(String uuid) {
         for (int i = 0; i < size(); i++) {
             if (storage.get(i).getUuid().equals(uuid)) {
@@ -51,10 +56,5 @@ public final class ListStorage extends AbstractStorage<Integer> {
     @Override
     protected boolean isExists(Integer index) {
         return index != null;
-    }
-
-    @Override
-    protected List<Resume> getAll() {
-        return new ArrayList<>(storage);
     }
 }

@@ -71,24 +71,6 @@ public final class DataStreamStrategy implements SerializationStrategy {
         }
     }
 
-    private static String writeNullable(String s) {
-        return (s != null) ? s : NULL;
-    }
-
-    private static <T> void writeCollection(DataOutputStream dos, Collection<T> collection, ElementWriter<T> action) throws IOException {
-        Objects.requireNonNull(collection);
-        Objects.requireNonNull(action);
-        dos.writeInt(collection.size());
-        for (T t : collection) {
-            action.write(t);
-        }
-    }
-
-    @FunctionalInterface
-    private interface ElementWriter<T> {
-        void write(T t) throws IOException;
-    }
-
     @Override
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
@@ -103,18 +85,6 @@ public final class DataStreamStrategy implements SerializationStrategy {
 
             return resume;
         }
-    }
-
-    private static void processData(DataInputStream dis, ElementProcessor action) throws IOException {
-        int size = dis.readInt();
-        for (int i = 0; i < size; i++) {
-            action.process();
-        }
-    }
-
-    @FunctionalInterface
-    private interface ElementProcessor {
-        void process() throws IOException;
     }
 
     private static AbstractSection readSection(DataInputStream dis, SectionType type) throws IOException {
@@ -138,8 +108,38 @@ public final class DataStreamStrategy implements SerializationStrategy {
         }
     }
 
+    private static String writeNullable(String s) {
+        return (s != null) ? s : NULL;
+    }
+
     private static String readNullable(String s) {
         return (NULL.equals(s)) ? null : s;
+    }
+
+    private static <T> void writeCollection(DataOutputStream dos, Collection<T> collection, ElementWriter<T> action) throws IOException {
+        Objects.requireNonNull(collection);
+        Objects.requireNonNull(action);
+        dos.writeInt(collection.size());
+        for (T t : collection) {
+            action.write(t);
+        }
+    }
+
+    @FunctionalInterface
+    private interface ElementWriter<T> {
+        void write(T t) throws IOException;
+    }
+
+    private static void processData(DataInputStream dis, ElementProcessor action) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            action.process();
+        }
+    }
+
+    @FunctionalInterface
+    private interface ElementProcessor {
+        void process() throws IOException;
     }
 
     private static <T> List<T> readList(DataInputStream dis, ElementReader<T> action) throws IOException {

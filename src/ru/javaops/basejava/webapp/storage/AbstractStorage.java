@@ -75,6 +75,22 @@ public abstract class AbstractStorage<SK> implements Storage {
     protected abstract Resume doGet(SK searchKey);
 
     /**
+     * @return {@code List} containing all Resumes in this storage sorted with {@code DEFAULT_RESUME_COMPARATOR}
+     */
+    @Override
+    public final List<Resume> getAllSorted() {
+        Collection<Resume> resumes = getAll();
+        return resumes.stream()
+                .sorted(DEFAULT_RESUME_COMPARATOR)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * @return {@code List} containing all Resumes in this storage (depending on implementation)
+     */
+    protected abstract List<Resume> getAll();
+
+    /**
      * Returns search key if Resume with {@code uuid} already exists in this storage
      *
      * @param uuid identifier of the Resume to be searched for
@@ -119,20 +135,4 @@ public abstract class AbstractStorage<SK> implements Storage {
      * @return {@code true} if the Resume exists in this storage, {@code false} otherwise
      */
     protected abstract boolean isExists(SK searchKey);
-
-    /**
-     * @return {@code List} containing all Resumes in this storage sorted with {@code DEFAULT_RESUME_COMPARATOR}
-     */
-    @Override
-    public final List<Resume> getAllSorted() {
-        Collection<Resume> resumes = getAll();
-        return resumes.stream()
-                .sorted(DEFAULT_RESUME_COMPARATOR)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * @return {@code List} containing all Resumes in this storage (depending on implementation)
-     */
-    protected abstract List<Resume> getAll();
 }
