@@ -20,8 +20,7 @@ public final class MainDemoStreams {
         return Arrays.stream(values)
                 .distinct()
                 .sorted()
-                .reduce((r, n) -> r * 10 + n)
-                .orElse(0);
+                .reduce(0, (r, n) -> r * 10 + n);
     }
 
     private static List<Integer> oddOrEven(List<Integer> integers) {
