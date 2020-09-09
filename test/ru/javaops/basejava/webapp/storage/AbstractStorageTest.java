@@ -2,6 +2,7 @@ package ru.javaops.basejava.webapp.storage;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.javaops.basejava.webapp.Config;
 import ru.javaops.basejava.webapp.exception.ExistStorageException;
 import ru.javaops.basejava.webapp.exception.NotExistStorageException;
 import ru.javaops.basejava.webapp.model.Resume;
@@ -11,18 +12,22 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static ru.javaops.basejava.webapp.ResumeTestData.getTestResume;
 
 public abstract class AbstractStorageTest {
-    static final File STORAGE_DIR = new File("./res/storage");
+    static final File STORAGE_DIR = Config.get().getStorageDir();
 
     private static final String UUID_1 = "uuidZ";
     private static final String UUID_2 = "uuidA";
 
-    private static final Resume RESUME_1 = getTestResume(UUID_1, "Zapp Brannigan");
-    private static final Resume RESUME_2 = getTestResume(UUID_2, "Amy Kroker");
-    private static final Resume RESUME_3 = getTestResume("Zapp Brannigan");
-    private static final Resume RESUME_4 = getTestResume(UUID_2, "Turanga Leela");
+//    private static final Resume RESUME_1 = getTestResume(UUID_1, "Zapp Brannigan");
+//    private static final Resume RESUME_2 = getTestResume(UUID_2, "Amy Kroker");
+//    private static final Resume RESUME_3 = getTestResume("Zapp Brannigan");
+//    private static final Resume RESUME_4 = getTestResume(UUID_2, "Turanga Leela");
+
+    private static final Resume RESUME_1 = new Resume(UUID_1, "Zapp Brannigan");
+    private static final Resume RESUME_2 = new Resume(UUID_2, "Amy Kroker");
+    private static final Resume RESUME_3 = new Resume("Zapp Brannigan");
+    private static final Resume RESUME_4 = new Resume(UUID_2, "Turanga Leela");
 
     final Storage storage;
 
@@ -47,7 +52,8 @@ public abstract class AbstractStorageTest {
     @Test
     public final void save() {
         int size = storage.size();
-        Resume newResume = getTestResume("Turanga Leela");
+//        Resume newResume = getTestResume("Turanga Leela");
+        Resume newResume = new Resume("Turanga Leela");
         storage.save(newResume);
         assertSize(size + 1);
         assertGet(newResume);
@@ -66,7 +72,8 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public final void updateNotExist() {
-        storage.update(getTestResume("dummy"));
+//        storage.update(getTestResume("dummy"));
+        storage.update(new Resume("dummy"));
     }
 
     @Test(expected = NotExistStorageException.class)
