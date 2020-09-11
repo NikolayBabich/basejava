@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Abstract storage for Resumes
  */
 public abstract class AbstractStorage<SK> implements Storage {
-    static final Comparator<Resume> DEFAULT_RESUME_COMPARATOR =
+    private static final Comparator<Resume> DEFAULT_RESUME_COMPARATOR =
             Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
     private static final Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
 

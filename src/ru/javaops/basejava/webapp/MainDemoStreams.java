@@ -30,5 +30,9 @@ public final class MainDemoStreams {
         return integers.stream()
                 .filter(i -> i % 2 != sum % 2)
                 .collect(Collectors.toList());
+
+//        Map<Boolean, List<Integer>> result = integers.stream()
+//                .collect(Collectors.groupingBy(x -> x % 2 == 0));
+//        return result.get(result.get(false).size() % 2 != 0);
     }
 }
