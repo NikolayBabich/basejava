@@ -10,14 +10,15 @@ import ru.javaops.basejava.webapp.model.Resume;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
     static final File STORAGE_DIR = Config.get().getStorageDir();
 
-    private static final String UUID_1 = "uuidZ";
-    private static final String UUID_2 = "uuidA";
+    private static final String UUID_1 = UUID.randomUUID().toString();
+    private static final String UUID_2 = UUID.randomUUID().toString();
 
 //    private static final Resume RESUME_1 = getTestResume(UUID_1, "Zapp Brannigan");
 //    private static final Resume RESUME_2 = getTestResume(UUID_2, "Amy Kroker");
