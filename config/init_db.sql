@@ -14,7 +14,7 @@ CREATE TABLE contact
             ON DELETE CASCADE,
     type        TEXT    NOT NULL,
     text_link   TEXT    NOT NULL,
-    url_link    TEXT    NOT NULL
+    url_link    TEXT
 );
 
 CREATE UNIQUE INDEX contact_uuid_type_index

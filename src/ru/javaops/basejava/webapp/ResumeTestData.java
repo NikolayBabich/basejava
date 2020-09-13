@@ -48,12 +48,17 @@ public final class ResumeTestData {
     }
 
     public static Resume getTestResume(String fullName) {
-        return getTestResume(UUID.randomUUID().toString().substring(0, 8), fullName);
+        return getTestResume(UUID.randomUUID().toString(), fullName);
     }
 
     public static Resume getTestResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
+        setContacts(resume);
+//        setSections(resume);
+        return resume;
+    }
 
+    private static void setContacts(Resume resume) {
         resume.setContact(ContactType.PHONE_NUMBER, new Link("+7(921) 855-0482", null));
         resume.setContact(ContactType.SKYPE, new Link("grigory.kislin", "skype:grigory.kislin"));
         resume.setContact(ContactType.EMAIL, new Link("gkislin@yandex.ru", "mailto:gkislin@yandex.ru"));
@@ -61,7 +66,9 @@ public final class ResumeTestData {
         resume.setContact(ContactType.GITHUB, new Link("Профиль GitHub", "https://github.com/gkislin"));
         resume.setContact(ContactType.STACKOVERFLOW, new Link("Профиль Stackoverflow", "https://stackoverflow.com/users/548473"));
         resume.setContact(ContactType.HOME_PAGE, new Link("Домашняя страница", "http://gkislin.ru/"));
+    }
 
+    private static void setSections(Resume resume) {
         resume.setSection(SectionType.OBJECTIVE,
                           new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
 
@@ -149,7 +156,5 @@ public final class ResumeTestData {
                 )
         ));
         resume.setSection(SectionType.EDUCATION, new OrganizationSection(educationOrganizations));
-
-        return resume;
     }
 }
