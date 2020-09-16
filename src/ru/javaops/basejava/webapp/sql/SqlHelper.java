@@ -4,7 +4,6 @@ import ru.javaops.basejava.webapp.exception.StorageException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public final class SqlHelper {
@@ -16,8 +15,7 @@ public final class SqlHelper {
 
     public <T> T execute(String query, SqlQueryExecutor<T> executor) {
         try (Connection conn = connectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE,
-                                                          ResultSet.CONCUR_READ_ONLY)) {
+             PreparedStatement ps = conn.prepareStatement(query)) {
             return executor.execute(ps);
         } catch (SQLException e) {
             throw ExceptionUtil.convertException(e);

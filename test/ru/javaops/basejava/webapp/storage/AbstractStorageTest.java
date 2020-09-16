@@ -20,10 +20,10 @@ public abstract class AbstractStorageTest {
     private static final String UUID_1 = "fff28b8d-bb88-487b-aa96-7655a7e1146c";
     private static final String UUID_2 = "000d55f9-6570-4a9c-b190-12fa94fefe4a";
 
-    private static final Resume RESUME_1 = getTestResume(UUID_1, "Zapp Brannigan");
-    private static final Resume RESUME_2 = getTestResume(UUID_2, "Amy Kroker");
+    private static final Resume RESUME_1 = getTestResume(UUID_1, "Zapp Brannigan", true);
+    private static final Resume RESUME_2 = getTestResume(UUID_2, "Amy Kroker", true);
     private static final Resume RESUME_3 = getTestResume("Zapp Brannigan");
-    private static final Resume RESUME_4 = getTestResume(UUID_2, "Turanga Leela");
+    private static final Resume RESUME_4 = getTestResume(UUID_2, "Turanga Leela", false);
 
     final Storage storage;
 

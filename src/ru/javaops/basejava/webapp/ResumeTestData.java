@@ -48,12 +48,15 @@ public final class ResumeTestData {
     }
 
     public static Resume getTestResume(String fullName) {
-        return getTestResume(UUID.randomUUID().toString(), fullName);
+        return getTestResume(UUID.randomUUID().toString(), fullName, true);
     }
 
-    public static Resume getTestResume(String uuid, String fullName) {
+    public static Resume getTestResume(String uuid, String fullName, boolean allContacts) {
         Resume resume = new Resume(uuid, fullName);
         setContacts(resume);
+        if (allContacts) {
+            resume.setContact(ContactType.HOME_PAGE, new Link("Домашняя страница", "http://gkislin.ru/"));
+        }
 //        setSections(resume);
         return resume;
     }
@@ -65,8 +68,8 @@ public final class ResumeTestData {
         resume.setContact(ContactType.LINKEDIN, new Link("Профиль LinkedIn", "https://www.linkedin.com/in/gkislin"));
         resume.setContact(ContactType.GITHUB, new Link("Профиль GitHub", "https://github.com/gkislin"));
         resume.setContact(ContactType.STACKOVERFLOW, new Link("Профиль Stackoverflow", "https://stackoverflow.com/users/548473"));
-        resume.setContact(ContactType.HOME_PAGE, new Link("Домашняя страница", "http://gkislin.ru/"));
     }
+
 
     private static void setSections(Resume resume) {
         resume.setSection(SectionType.OBJECTIVE,
