@@ -147,6 +147,8 @@ public final class SqlStorage implements Storage {
 
     private static void setContact(ResultSet rs, Resume resume) throws SQLException {
         String type = rs.getString("type");
-        resume.setContact(ContactType.valueOf(type), new Link(rs.getString("text_link"), rs.getString("url_link")));
+        if (type != null) {
+            resume.setContact(ContactType.valueOf(type), new Link(rs.getString("text_link"), rs.getString("url_link")));
+        }
     }
 }
