@@ -1,7 +1,6 @@
 package ru.javaops.basejava.webapp.storage;
 
 import ru.javaops.basejava.webapp.exception.NotExistStorageException;
-import ru.javaops.basejava.webapp.exception.StorageException;
 import ru.javaops.basejava.webapp.model.ContactType;
 import ru.javaops.basejava.webapp.model.Link;
 import ru.javaops.basejava.webapp.model.Resume;
@@ -89,22 +88,23 @@ public final class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return new ArrayList<>(helper.execute(SELECT_WITH_CONTACTS + " ORDER BY full_name, uuid", ps -> {
-            ResultSet rs = ps.executeQuery();
+        return helper.transactionalExecute(conn -> {
             Map<String, Resume> map = new LinkedHashMap<>();
-            while (rs.next()) {
-                String uuid = rs.getString("uuid");
-                map.computeIfAbsent(uuid, u -> {
-                    try {
-                        return new Resume(u, rs.getString("full_name"));
-                    } catch (SQLException e) {
-                        throw new StorageException(e);
-                    }
-                });
-                setContact(rs, map.get(uuid));
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    String uuid = rs.getString("uuid");
+                    map.put(uuid, new Resume(uuid, rs.getString("full_name")));
+                }
             }
-            return map.values();
-        }));
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    setContact(rs, map.get(rs.getString("resume_uuid")));
+                }
+            }
+            return new ArrayList<>(map.values());
+        });
     }
 
     @Override
