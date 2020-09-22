@@ -48,16 +48,25 @@ public final class ResumeTestData {
     }
 
     public static Resume getTestResume(String fullName) {
-        return getTestResume(UUID.randomUUID().toString(), fullName, true);
+        return getTestResume(UUID.randomUUID().toString(), fullName, true, true);
     }
 
-    public static Resume getTestResume(String uuid, String fullName, boolean allContacts) {
+    public static Resume getTestResume(String uuid, String fullName, boolean allContacts, boolean allSections) {
         Resume resume = new Resume(uuid, fullName);
         setContacts(resume);
         if (allContacts) {
             resume.setContact(ContactType.HOME_PAGE, new Link("Домашняя страница", "http://gkislin.ru/"));
         }
-//        setSections(resume);
+        setSections(resume);
+        if (allSections) {
+            List<String> qualifications = new ArrayList<>();
+            qualifications.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
+            qualifications.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
+            qualifications.add("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle");
+            qualifications.add("Languages: Java, Scala, Python/Jython/PL-Python, JavaScript, Groovy");
+            qualifications.add("JavaScript: jQuery, ExtJS, Bootstrap.js, underscore.js");
+            resume.setSection(SectionType.QUALIFICATIONS, new ListSection(qualifications));
+        }
         return resume;
     }
 
@@ -89,14 +98,10 @@ public final class ResumeTestData {
                             "модулей, интеграция CIFS/SMB java сервера");
         resume.setSection(SectionType.ACHIEVEMENT, new ListSection(achievs));
 
-        List<String> qualifications = new ArrayList<>();
-        qualifications.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
-        qualifications.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
-        qualifications.add("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle");
-        qualifications.add("Languages: Java, Scala, Python/Jython/PL-Python, JavaScript, Groovy");
-        qualifications.add("JavaScript: jQuery, ExtJS, Bootstrap.js, underscore.js");
-        resume.setSection(SectionType.QUALIFICATIONS, new ListSection(qualifications));
+//        setOrganizationSections(resume);
+    }
 
+    private static void setOrganizationSections(Resume resume) {
         List<Organization> experienceOrganizations = new ArrayList<>();
         experienceOrganizations.add(new Organization(
                 "Java Online Projects", "http://javaops.ru/",

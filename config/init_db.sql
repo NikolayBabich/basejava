@@ -20,3 +20,25 @@ CREATE TABLE contact
 CREATE UNIQUE INDEX contact_uuid_type_index
     ON contact (resume_uuid, type);
 
+CREATE TYPE section_type AS ENUM (
+    'OBJECTIVE',
+    'PERSONAL',
+    'ACHIEVEMENT',
+    'QUALIFICATIONS',
+    'EXPERIENCE',
+    'EDUCATION'
+);
+
+CREATE TABLE section
+(
+    id        SERIAL  NOT NULL
+        PRIMARY KEY,
+    resume_uuid CHAR(36) NOT NULL
+        REFERENCES resume
+            ON DELETE CASCADE,
+    type      SECTION_TYPE NOT NULL,
+    content   TEXT
+);
+
+CREATE UNIQUE INDEX section_uuid_type_index
+    ON section (resume_uuid, type);
