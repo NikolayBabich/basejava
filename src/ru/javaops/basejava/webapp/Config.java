@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public final class Config {
-    private static final File PROPS = new File("config/resumes.properties");
+    private static final File PROPS = new File("D:/Java/Git_projects/basejava/config/resumes.properties");
     private static final Config INSTANCE = new Config();
 
     private final File storageDir;
