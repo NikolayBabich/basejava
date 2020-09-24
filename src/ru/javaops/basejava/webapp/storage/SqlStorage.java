@@ -16,7 +16,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -194,16 +193,25 @@ public final class SqlStorage implements Storage {
                         "VALUES (?, ?, ?)")) {
             for (Map.Entry<SectionType, AbstractSection> e : resume.getSections().entrySet()) {
                 ps.setString(1, resume.getUuid());
-                ps.setObject(2, e.getKey().name(), Types.OTHER);
-
+                SectionType type = e.getKey();
+                ps.setString(2, type.name());
                 String content = null;
                 AbstractSection section = e.getValue();
-                if (section.getClass() == TextSection.class) {
-                    content = ((TextSection) section).getContent();
-                } else if (section.getClass() == ListSection.class) {
-                    content = String.join("\n", ((ListSection) section).getContent());
-                } else if (section.getClass() == OrganizationSection.class) {
-                    //TODO: maybe later
+                switch (type) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        content = ((TextSection) section).getContent();
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        content = String.join("\n", ((ListSection) section).getContent());
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        //TODO: maybe later
+                        break;
+                    default:
+                        throw new AssertionError("Should not get here");
                 }
                 ps.setString(3, content);
                 ps.addBatch();
