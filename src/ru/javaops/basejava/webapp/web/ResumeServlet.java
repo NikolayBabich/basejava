@@ -4,7 +4,6 @@ import ru.javaops.basejava.webapp.Config;
 import ru.javaops.basejava.webapp.model.Resume;
 import ru.javaops.basejava.webapp.storage.Storage;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -42,24 +41,30 @@ public class ResumeServlet extends HttpServlet {
             "</body>\n" +
             "</html>";
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private Storage storage;
+
+    @Override
+    public final void init() {
+        storage = Config.get().getSqlStorage();
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    }
+
+    @Override
+    protected final void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=utf-8");
-        Storage storage = Config.get().getSqlStorage();
         String uuid = request.getParameter("uuid");
         String html = (uuid == null) ? getAllResumes(storage) : getConcreteResume(storage, uuid);
-        response.getWriter().write(html);
+        response.getWriter().print(html);
     }
 
     private static String getConcreteResume(Storage storage, String uuid) {
         Resume resume = storage.get(uuid);
-        String row = getHtmlRow(resume);
-        return HTML_HEAD + row + HTML_TAIL;
+        return HTML_HEAD + getHtmlRow(resume) + HTML_TAIL;
     }
 
     private static String getAllResumes(Storage storage) {

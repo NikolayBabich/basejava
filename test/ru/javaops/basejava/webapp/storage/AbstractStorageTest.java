@@ -22,7 +22,7 @@ public abstract class AbstractStorageTest {
 
     private static final Resume RESUME_1 = new Resume(UUID_1, "Zapp Brannigan");
     private static final Resume RESUME_2 = getTestResume(UUID_2, "Amy Kroker", true, false);
-    private static final Resume RESUME_3 = getTestResume("Zapp Brannigan");
+    private static final Resume RESUME_3 = getTestResume("Dr. Zoidberg");
     private static final Resume RESUME_4 = getTestResume(UUID_2, "Turanga Leela", false, true);
 
     final Storage storage;

@@ -98,7 +98,7 @@ public final class ResumeTestData {
                             "модулей, интеграция CIFS/SMB java сервера");
         resume.setSection(SectionType.ACHIEVEMENT, new ListSection(achievs));
 
-//        setOrganizationSections(resume);
+        setOrganizationSections(resume);
     }
 
     private static void setOrganizationSections(Resume resume) {
