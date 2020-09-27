@@ -74,18 +74,3 @@ a[href*="github."] {
     padding-left: 20px !important;
     background: url(../img/gh.png) no-repeat center left;
 }
-
-table, th {
-    border: 2px solid black;
-    border-collapse: collapse;
-}
-
-tr {
-    border: 1px solid black;
-}
-
-td {
-    border-right: 2px solid black;
-    border-left: 2px solid black;
-    padding: 8px;
-}

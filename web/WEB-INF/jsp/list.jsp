@@ -6,6 +6,22 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        table, th {
+            border: 2px solid black;
+            border-collapse: collapse;
+        }
+
+        tr {
+            border: 1px solid black;
+        }
+
+        td {
+            border-right: 2px solid black;
+            border-left: 2px solid black;
+            padding: 8px;
+        }
+    </style>
     <title>Список всех резюме</title>
 </head>
 <body>
@@ -30,6 +46,9 @@
                 <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png" alt="Изменить"></a></td>
             </tr>
         </c:forEach>
+        <tr>
+            <td colspan="5" style="text-align:center"><a href="resume?uuid=0&action=edit"><img src="img/add.png" alt="Создать">Create new resume</a></td>
+        </tr>
     </table>
 </section>
 <jsp:include page="fragments/footer.jsp"/>

@@ -128,15 +128,16 @@ public final class Organization implements Serializable {
 
         @Override
         public String toString() {
-            String startDateText =
-                    String.format("%02d\\%04d", startDate.getMonthValue(), startDate.getYear());
+            String descriptionText = (description == null) ? "" : description;
+            return toDateString() + "\t\t" + title + '\n' + descriptionText;
+        }
+
+        public String toDateString() {
+            String startDateText = String.format("%02d\\%04d", startDate.getMonthValue(), startDate.getYear());
             String finishDateText = (finishDate.isAfter(LocalDate.now()))
                                     ? "Сейчас"
                                     : String.format("%02d\\%04d", finishDate.getMonthValue(), finishDate.getYear());
-            String descriptionText = (description == null) ? "" : description;
-
-            return startDateText + " - " + finishDateText + "\t\t" +
-                    title + '\n' + descriptionText;
+            return startDateText + " - " + finishDateText;
         }
     }
 }

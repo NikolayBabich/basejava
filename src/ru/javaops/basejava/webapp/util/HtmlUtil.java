@@ -1,8 +1,14 @@
 package ru.javaops.basejava.webapp.util;
 
+import ru.javaops.basejava.webapp.model.AbstractSection;
 import ru.javaops.basejava.webapp.model.ContactType;
 import ru.javaops.basejava.webapp.model.Link;
+import ru.javaops.basejava.webapp.model.ListSection;
 import ru.javaops.basejava.webapp.model.Resume;
+import ru.javaops.basejava.webapp.model.SectionType;
+import ru.javaops.basejava.webapp.model.TextSection;
+
+import java.util.Arrays;
 
 public final class HtmlUtil {
     private HtmlUtil() {
@@ -94,5 +100,21 @@ public final class HtmlUtil {
                 throw new AssertionError("Should not get here");
         }
         return "<img src=\"img/" + imgName + "\">";
+    }
+
+    public static AbstractSection convertContentToSection(SectionType type, String content) {
+        switch (type) {
+            case OBJECTIVE:
+            case PERSONAL:
+                return new TextSection(content);
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                return new ListSection(Arrays.asList(content.split("\n")));
+//            case EXPERIENCE:
+//            case EDUCATION:
+//                return new OrganizationSection(null);
+            default:
+                throw new AssertionError("Should not get here");
+        }
     }
 }
