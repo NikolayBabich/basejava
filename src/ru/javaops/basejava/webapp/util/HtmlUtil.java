@@ -9,6 +9,8 @@ import ru.javaops.basejava.webapp.model.SectionType;
 import ru.javaops.basejava.webapp.model.TextSection;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class HtmlUtil {
     private HtmlUtil() {
@@ -109,7 +111,11 @@ public final class HtmlUtil {
                 return new TextSection(content);
             case ACHIEVEMENT:
             case QUALIFICATIONS:
-                return new ListSection(Arrays.asList(content.split("\n")));
+                List<String> lines = Arrays.stream(content.split(System.lineSeparator()))
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .collect(Collectors.toList());
+                return new ListSection(lines);
 //            case EXPERIENCE:
 //            case EDUCATION:
 //                return new OrganizationSection(null);

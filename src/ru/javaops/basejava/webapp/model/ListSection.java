@@ -40,6 +40,6 @@ public final class ListSection extends AbstractSection {
 
     @Override
     public String toString() {
-        return (content == null) ? "" : String.join("\n", content);
+        return (content == null) ? "" : String.join(System.lineSeparator(), content);
     }
 }

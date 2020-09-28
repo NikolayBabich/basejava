@@ -42,12 +42,12 @@ public class ResumeServlet extends HttpServlet {
         }
 
         for (SectionType type : SectionType.values()) {
-            String content = request.getParameter(type.name());
-            if (content == null || content.trim().isEmpty()) {
-                resume.getSections().remove(type);
-            } else {
-                if (type != SectionType.EXPERIENCE && type != SectionType.EDUCATION) {
-                    resume.setSection(type, HtmlUtil.convertContentToSection(type, content));
+            if (type != SectionType.EXPERIENCE && type != SectionType.EDUCATION) {
+                String content = request.getParameter(type.name());
+                if (content == null || content.trim().isEmpty()) {
+                    resume.getSections().remove(type);
+                } else {
+                    resume.setSection(type, HtmlUtil.convertContentToSection(type, content.trim()));
                 }
             }
         }

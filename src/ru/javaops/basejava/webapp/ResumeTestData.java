@@ -71,7 +71,7 @@ public final class ResumeTestData {
     }
 
     private static void setContacts(Resume resume) {
-        resume.setContact(ContactType.PHONE_NUMBER, new Link("+7(921) 855-0482", null));
+        resume.setContact(ContactType.PHONE_NUMBER, new Link("+7(921) 855-0482", "tel:+7(921) 855-0482"));
         resume.setContact(ContactType.SKYPE, new Link("grigory.kislin", "skype:grigory.kislin"));
         resume.setContact(ContactType.EMAIL, new Link("gkislin@yandex.ru", "mailto:gkislin@yandex.ru"));
         resume.setContact(ContactType.LINKEDIN, new Link("Профиль LinkedIn", "https://www.linkedin.com/in/gkislin"));
