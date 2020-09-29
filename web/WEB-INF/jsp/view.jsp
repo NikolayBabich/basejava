@@ -20,7 +20,7 @@
     <p>
         <c:forEach var="contactType" items="${resume.contacts.keySet()}">
             <jsp:useBean id="contactType" type="ru.javaops.basejava.webapp.model.ContactType"/>
-            <%--<%=HtmlUtil.getContactImgHtml(contactType)%>&nbsp;--%>${resume.getContact(contactType)}<br/>
+            <%--<%=HtmlUtil.getContactImgHtml(contactType)%>&nbsp;--%>${resume.getContact(contactType)}<br>
         </c:forEach>
     <p>
     <hr>
@@ -35,7 +35,7 @@
                 <c:when test="${sectionEntry.key == 'OBJECTIVE' || sectionEntry.key == 'PERSONAL'}">
                     <tr>
                         <td colspan="2">
-                            <%=((TextSection) sectionEntry.getValue()).getContent()%>
+                                ${sectionEntry.value.getContent()}
                         </td>
                     </tr>
                 </c:when>
@@ -43,7 +43,7 @@
                     <tr>
                         <td colspan="2">
                             <ul>
-                                <c:forEach var="line" items="<%=((ListSection) sectionEntry.getValue()).getContent()%>">
+                                <c:forEach var="line" items="${sectionEntry.value.getContent()}">
                                     <li>${line}
                                     </li>
                                 </c:forEach>
@@ -52,16 +52,15 @@
                     </tr>
                 </c:when>
                 <c:when test="${sectionEntry.key == 'EXPERIENCE' || sectionEntry.key == 'EDUCATION'}">
-                    <c:forEach var="content" items="<%=((OrganizationSection) sectionEntry.getValue()).getContent()%>">
+                    <c:forEach var="organization" items="${sectionEntry.value.getContent()}">
                         <tr>
                             <td colspan="2">
-                                <h3>${content.homePage}</h3>
+                                <h3>${organization.homePage}</h3>
                             </td>
                         </tr>
-                        <c:forEach var="experience" items="${content.experiences}">
+                        <c:forEach var="experience" items="${organization.experiences}">
                             <tr>
-                                <td style="width: 20%; vertical-align: top"><%=((Organization.Experience) pageContext.getAttribute("experience")).toDateString()%>
-                                </td>
+                                <td style="width: 20%; vertical-align: top">${experience.toDateString()}</td>
                                 <td><b>${experience.title}</b><br>${experience.description}</td>
                             </tr>
                         </c:forEach>
