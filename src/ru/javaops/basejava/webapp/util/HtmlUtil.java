@@ -8,16 +8,11 @@ import ru.javaops.basejava.webapp.model.Resume;
 import ru.javaops.basejava.webapp.model.SectionType;
 import ru.javaops.basejava.webapp.model.TextSection;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public final class HtmlUtil {
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM");
-    private static final DateTimeFormatter DATE_PARSER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
     private HtmlUtil() {
     }
 
@@ -124,20 +119,5 @@ public final class HtmlUtil {
             default:
                 throw new AssertionError("Should not get here");
         }
-    }
-
-    public static String convertDateToHtml(LocalDate date) {
-        if (LocalDate.MAX.equals(date)) {
-            date = LocalDate.now();
-        }
-        return DATE_FORMATTER.format(date);
-    }
-
-    public static LocalDate convertHtmlToDate(String html) {
-        LocalDate date = LocalDate.parse(html + "-01", DATE_PARSER);
-        if (date.isAfter(LocalDate.now().minusMonths(1))) {
-            date = LocalDate.MAX;
-        }
-        return date;
     }
 }

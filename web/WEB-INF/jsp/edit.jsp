@@ -1,6 +1,7 @@
 <%--suppress XmlPathReference --%>
 <%@ page import="ru.javaops.basejava.webapp.model.ContactType" %>
 <%@ page import="ru.javaops.basejava.webapp.model.SectionType" %>
+<%@ page import="ru.javaops.basejava.webapp.util.DateUtil" %>
 <%@ page import="ru.javaops.basejava.webapp.util.HtmlUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -54,9 +55,9 @@
                             <input type="hidden" name="${type}.expSize" value="${organization.experiences.size()}">
                             <c:forEach var="experience" items="${organization.experiences}">
                                 <dd>Начало <input type="month" name="${type}.startDate"
-                                                  value="${HtmlUtil.convertDateToHtml(experience.startDate)}" min="1970-01" max="2021-12"></dd>
+                                                  value="${DateUtil.convertDateToHtml(experience.startDate)}" min="1970-01" max="2021-12"></dd>
                                 <dd>Конец <input type="month" name="${type}.finishDate"
-                                                 value="${HtmlUtil.convertDateToHtml(experience.finishDate)}" min="1970-01" max="2021-12"></dd>
+                                                 value="${DateUtil.convertDateToHtml(experience.finishDate)}" min="1970-01" max="2021-12"></dd>
                                 <br>
                                 <dd>Позиция <input type="text" name="${type}.title" size=50 value="${fn:escapeXml(experience.title)}"></dd>
                                 <dd><textarea rows="3" cols="102" name="${type}.description">${fn:escapeXml(experience.description)}</textarea></dd>
